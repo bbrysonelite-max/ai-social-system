@@ -85,15 +85,17 @@ Subscription active. 0 posts scheduled (clean slate). Priority reflects followin
 
 | # | Platform | Blotato account ID | Account | Posting requirement |
 |---|---|---|---|---|
-| 1 | **Facebook** (primary) | `20306` | Brent Bryson | requires `pageId` from a subaccount (a Facebook **Page**) |
+| 1 | **Facebook** (primary) | `37125` | Brent Bryson (Page `53954221244`) | `pageId` = `53954221244` ✅ Page connected |
 | 2 | **Instagram** (primary) | `53674` | @brentbryson | `mediaType` = `story` or `reel` (visual-first, not plain feed caption) |
 | 3 | **YouTube** (anchor) | `27755` | Brent Bryson | `title` + `privacyStatus` (public/private/unlisted) |
 | 4 | **X** (low) | `12730` | @pebobryson801 | none; supports threads via `additionalPosts` |
 
-⚠️ **Facebook Page gap (action for Brent).** The Facebook account is connected as a profile
-but **no Page is linked** (`subaccounts: []`; dashboard shows "Facebook pages: Don't see your
-pages? Help"). Blotato requires a `pageId` to post to Facebook, so the biggest channel is
-**not postable until a Page is connected** in the Blotato dashboard. Resolve before FB goes live.
+✅ **Facebook Page gap RESOLVED (2026-06-17).** Brent reconnected Facebook and granted the
+"Brent Bryson" Page; it now appears as a subaccount with `pageId` `53954221244`, so FB is
+postable. **Note:** the FB account ID changed on reconnect (`20306` → `37125`) — concrete
+proof of the runtime rule: **always call `blotato_list_accounts` at the start of every run
+and map platform→accountId from the live response; never hardcode IDs.** (Blotato can only
+post to a Facebook **Page**, never a personal profile — Meta restriction.)
 
 ⚠️ **Instagram is story/reel only** via the API — there is no plain caption-only feed post.
 IG drafts from `write-content` must be visual-first (image/carousel/reel with caption).
@@ -184,6 +186,6 @@ mechanism (tool/landing page).
 
 - [x] Enumerate connected channels in the Blotato account — DONE 2026-06-17 (4 channels, table above)
 - [x] Map Blotato tool surface (publish, media/visual gen, scheduling) — DONE 2026-06-17 (surface above)
-- [ ] **Brent action:** connect a Facebook **Page** in Blotato (FB not postable until then)
+- [x] **Brent action:** connect a Facebook **Page** in Blotato — DONE 2026-06-17 (Page `53954221244`); all 4 channels now postable
 - [ ] Build Skill 2 (`blotato-post`) against the verified surface — via three-agent rule
 - [ ] Account warm-up ramp before scaling to factory volume (see `account-warm-up-plan.md`, PR #4)

@@ -19,12 +19,16 @@ before anything schedules.** Respect the account warm-up ramp (`docs/account-war
 
 | Platform | Account ID | Account | Posting requirement |
 |---|---|---|---|
-| Facebook | `20306` | Brent Bryson | `pageId` from a subaccount — ⚠️ **no Page connected yet; FB not postable until Brent links one** |
+| Facebook | `37125` | Brent Bryson (Page `53954221244`) | `pageId` = `53954221244` ✅ Page connected; **postable** (business Page, not the personal profile — Meta only allows Pages) |
 | Instagram | `53674` | @brentbryson | `mediaType` = `story`\|`reel` (visual-first; no plain caption feed post) |
 | YouTube | `27755` | Brent Bryson | `title` + `privacyStatus` (public/private/unlisted) |
 | X/Twitter | `12730` | @pebobryson801 | none; threads via `additionalPosts` |
 
 LinkedIn + TikTok not connected. Subscription active. 0 posts scheduled (clean slate).
+
+**Runtime rule:** account IDs can change on reconnect (FB went `20306` → `37125` when the
+Page was added 2026-06-17). ALWAYS call `blotato_list_accounts` at the start of every run
+and map platform→`accountId` from the live response. Never hardcode the IDs in this table.
 
 ## Verified Blotato tool surface (the repurposing engine)
 
@@ -51,7 +55,9 @@ one-click "atomize into N posts" call exists; the intelligence stays in the skil
 
 - [x] Live-verify connected channels via the MCP — DONE.
 - [x] Map Blotato tool surface — DONE (above).
-- [ ] Plan the skill (writing-plans), then build via three-agent rule (author/test/review separate).
+- [x] FB Page connected (business Page `53954221244`) — all 4 channels now postable.
+- [x] Plan the skill (writing-plans) — DONE (`docs/superpowers/plans/2026-06-17-blotato-post-skill.md`, PR #6).
+- [ ] Build via three-agent rule (author/test/review separate).
 - [ ] Human-in-the-loop review gate before anything schedules.
 - [ ] Honor warm-up ramp: reach-safe CTAs, low volume first, no cold external links.
-- [ ] Handle the FB Page gap gracefully (validate accounts at runtime; surface, don't crash).
+- [ ] Re-verify accounts at runtime (IDs change on reconnect — see Runtime rule above).
