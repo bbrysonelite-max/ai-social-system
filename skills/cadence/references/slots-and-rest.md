@@ -47,9 +47,13 @@ Returns `{ "items": [{ "id": "…", … }] }`. Use `items[].id` as:
 
 ---
 
-## Schedule slots (the cadence backbone)
+## Schedule slots (optional — plan-gated)
 
-Slots are recurring posting windows. Each slot defines a time-of-day and day-of-week for a given channel. When `useNextFreeSlot: true` is set on a post, Blotato drops it into the next open slot for that channel.
+> **LIVE TEST FINDING (2026-06-17):** On Brent's current Blotato plan, `POST /schedule/slots` returns **`Unauthorized`**. Slots and `useNextFreeSlot` are **OPTIONAL / best-effort — NOT the primary scheduling mechanism.**
+>
+> **The primary scheduling mechanism is explicit `scheduledTime` on `POST /posts`** — this is verified working. Use explicit ISO-8601 `scheduledTime` values on every `POST /posts` call. Fall back to `useNextFreeSlot` only if the plan is upgraded and slot creation is confirmed to work.
+
+Slots are recurring posting windows. Each slot defines a time-of-day and day-of-week for a given channel. When `useNextFreeSlot: true` is set on a post, Blotato drops it into the next open slot for that channel. (Docs below preserved for reference — may work on other plans or after a plan upgrade.)
 
 ### List existing slots
 
@@ -163,6 +167,8 @@ GET /schedules/{id}             // retrieve one scheduled post
 DELETE /schedules/{id}          // cancel a scheduled post
 PATCH /schedules/{id}           // update (reschedule) a post
 ```
+
+> **DELETE gotcha (verified 2026-06-17):** `DELETE /schedules/{id}` must be sent with the auth header ONLY. Do **NOT** set `Content-Type: application/json` and do **NOT** send a request body — an empty body with that content-type returns `400 "Body cannot be empty"`. Send the DELETE bare: auth header, no body, no content-type.
 
 ---
 

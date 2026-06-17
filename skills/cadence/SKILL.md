@@ -94,7 +94,7 @@ in order:
 | 3 | Pull fresh material | Apply "Do, Then Share" source priority; enforce no-repeat guard against `usedIdeas`; if idea bank exhausted stop and ask Brent. |
 | 4 | Draft each post | Run `write-content` skill per idea; accept only drafts that pass all 5 criteria; never mutate copy. |
 | 5 | Build visuals | Generate visuals for every IG post (required); optional for FB/X; skip IG post cleanly if generation fails. |
-| 6 | Assign to slots | Verify/create Blotato schedule slots at Week N count; assign each post a scheduled time. |
+| 6 | Assign send times (slots optional) | Compute explicit ISO-8601 UTC `scheduledTime` for each post spread across the week (primary path — slots/`useNextFreeSlot` are plan-gated and currently return Unauthorized on Brent's plan). |
 | 7 | Present batch + approval gate | Show full batch; run rubric criteria 2–5; wait for explicit approval (see Approval gate below). |
 | 8 | Schedule + update state | On approval: `POST /posts`; confirm via `GET /schedules`; append `usedIdeas` + `scheduled` entries to `state.json`. |
 
@@ -173,9 +173,7 @@ else is automatic:
 - **No-repeat guard is automatic** — every idea slug is checked against
   `usedIdeas` before drafting; the ledger is append-only and persists across
   sessions.
-- **Slots self-provision** — Step 6 compares current Blotato slot count to the
-  week's required count and creates any missing slots without deleting existing
-  ones.
+- **Send times computed explicitly** — Step 6 assigns explicit ISO-8601 UTC `scheduledTime` values spread across the week's days per channel (primary path). Slot self-provisioning is optional — currently plan-gated (`POST /schedule/slots` returns Unauthorized on Brent's plan).
 - **State persists** — `state.json` is updated immediately after every approved
   batch; the next run picks up exactly where this one left off.
 - **Weekly trigger** — run `/cadence` at the start of each content week to keep

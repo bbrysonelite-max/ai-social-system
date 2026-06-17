@@ -130,23 +130,32 @@ If visual generation fails for an Instagram post, skip that post for this run an
 
 ---
 
-## Step 6 — Assign to slots
+## Step 6 — Assign send times (slots optional)
 
-Ensure this week's schedule slots exist in Blotato, then assign posts to them.
+Compute explicit send times for every post and distribute them across the week's 7-day window.
 
-### Slot count check
+### Primary path — explicit `scheduledTime` (use this)
 
-From `slots-and-rest.md` (Ramping rule): Week N has N slots/day/channel (capped at 4).
+> **Plan limitation (verified 2026-06-17):** `POST /schedule/slots` returns `Unauthorized` on Brent's current plan. Compute explicit ISO-8601 UTC `scheduledTime` values directly — do not rely on slots or `useNextFreeSlot`.
+
+For each channel and each day, assign a send time by staggering posts at sensible hours. Example spread for `perDayPerChannel = 2`:
+
+- Post 1: 14:00 UTC (morning in US-friendly zones)
+- Post 2: 20:00 UTC (early evening)
+
+Adjust hours per channel character (e.g. FB/IG slightly earlier, X can go later). Spread posts for the same idea across different days — do not cluster all posts on day 1.
+
+Assign one explicit `scheduledTime` (ISO-8601 UTC) to each post. These values are used directly in the Step 8 `POST /posts` calls at root level.
+
+### Optional — `useNextFreeSlot` (only if plan supports slots)
+
+If Brent's plan is upgraded and `POST /schedule/slots` no longer returns `Unauthorized`, you may instead:
 
 1. Call `GET /schedule/slots` and count existing slots per channel per day.
-2. If the current week requires more slots than exist, create the additional ones via `POST /schedule/slots`. Do not duplicate slots with the same `hour`/`minute`/`day`/`selectedTargets` combination. Never delete existing slots.
+2. Create any missing slots via `POST /schedule/slots` to reach Week N count (capped at 4). Do not duplicate same `hour`/`minute`/`day`/`selectedTargets`. Never delete existing slots.
+3. Set `useNextFreeSlot: true` on each post (instead of `scheduledTime`). Do not combine both.
 
-### Assign posts to days/times
-
-Distribute the week's posts across the 7-day window, matching post volume per day to `perDayPerChannel`. Two assignment options (from `slots-and-rest.md`):
-
-- **Explicit scheduling:** set `scheduledTime` (ISO-8601 UTC) on each post. Use `POST /schedule/slots/next-available` to find the next open slot per channel if needed.
-- **Slot-based:** set `useNextFreeSlot: true` to let Blotato assign to the next available slot for that channel. Do not combine with `scheduledTime`.
+Until slot creation is confirmed working, use the explicit `scheduledTime` path above.
 
 Record the intended scheduled time for each post — this is needed for the approval presentation in Step 7.
 
