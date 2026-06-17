@@ -68,9 +68,22 @@ This is Sabrina Ramonov's "Do, Then Share" playbook applied to Brent's business.
 
 1. **Brent's real receipts and journey this week** — things he actually did or learned: building Tiger, working his distribution network, team outcomes, process notes, screenshots, metrics. Document the journey even before big results land. A single concrete win → many posts. Anchor in Brent's 39-year network-marketing track record wherever credibility context helps — this is a rare, earned proof point that sets him apart.
 
-2. **Repurposed cores** — feed a long-form source (the webinar recording, a YouTube script, a written-up case study, a field story) into Blotato's `POST /source-resolutions-v3` (the REST repurposing endpoint; same as `create_source` in the Blotato MCP) repurposing endpoint, poll until `status: completed`, then extract the content. One strong core → atomize it into many platform posts. This is high leverage. See `slots-and-rest.md` (Sources & visuals section) for the endpoint contract; hand extracted content to `write-content` for voice-true drafting — the raw extraction is never Brent's voice.
+2. **Repurposed cores** — feed a long-form source into Blotato's `POST /source-resolutions-v3` (the REST repurposing endpoint; same as `create_source` in the Blotato MCP), poll until `status: completed`, then extract the content. One strong core → atomize it into many platform posts. This is high leverage. See `slots-and-rest.md` (Sources & visuals section) for the endpoint contract; hand extracted content to `write-content` for voice-true drafting — the raw extraction is never Brent's voice.
 
-3. **The idea bank** (`~/Desktop/Social Media Posts: Ideas/`) — use for fill when the above sources do not cover the week's volume.
+   **Source priority within repurposed cores (highest first):**
+
+   a. **Personal Obsidian vault** (`~/Desktop/vault-personal/`) — the PRIMARY and richest repurposing source. Contains:
+      - **Three books** at `02_The_Library/Book_1`, `02_The_Library/Book_2`, `02_The_Library/Book_3` — feed chapters/sections via `create_source` (`POST /source-resolutions-v3`, `sourceType: text` or `pdf`) and repurpose each many ways.
+      - **~354 notes / 1000+ ideas** across `01_Active_Projects`, `02_The_Library`, `03_The_Stream`, `04_The_Synthesizer` — a deep, effectively unlimited idea reservoir.
+      The vault (books + ideas combined) is effectively unlimited supply; the binding constraint each week is good graphics, not content volume.
+
+   b. **Webinar recording, YouTube scripts, written-up case studies, field stories** — strong evergreen cores; use whenever a recording or long-form piece should anchor the week.
+
+   c. **The ~76-idea Desktop bank** (`~/Desktop/Social Media Posts: Ideas/`) — use for fill when vault and other cores do not cover the week's volume.
+
+   The `usedIdeas` no-repeat guard applies across all sources — vault-derived slugs are tracked alongside idea-bank slugs.
+
+3. **The idea bank** (`~/Desktop/Social Media Posts: Ideas/`) — final fill only (see 2c above).
 
 **Do, Then Share principles to apply:**
 
@@ -100,7 +113,9 @@ The `write-content` skill does not post, schedule, or generate images. Collect a
 
 ## Step 5 — Build visuals
 
-For every **Instagram** post, generate a visual before scheduling. Instagram requires at least one image/video URL — caption-only posts are not supported via the API.
+**Posts are graphics-led.** Good images and carousels (Blotato Nano Banana templates + Brent's existing infographic library) carry most posts. Video is occasional — it is NOT required every post, so weekly volume does not demand a fresh video per slot. Use video only when footage or production value clearly warrants it.
+
+For every **Instagram** post, generate a visual before scheduling. Instagram requires at least one image/video URL — caption-only posts are not supported via the API. An image is sufficient; video only when footage/value warrants.
 
 For **Facebook** and **X**: text-only posts are valid. Visuals are optional but recommended for reach. Generate them when a visual adds clear value and templates are available.
 

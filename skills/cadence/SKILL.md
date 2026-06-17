@@ -53,8 +53,10 @@ weekly review-and-approve.
   `write-content`. Useful when a webinar recording or long-form piece should
   anchor the week.
 - **`--dry-run`** — assemble and present the full batch (Steps 1–7) without
-  calling `POST /posts` or updating `state.json`. The approval gate still runs;
-  the confirmation that Brent would be approving real scheduling is shown.
+  calling `POST /posts` or updating `state.json` (shows the assembled batch but
+  submits nothing — no `GET /schedules` confirmation appears). The approval gate
+  still runs; the confirmation that Brent would be approving real scheduling is
+  shown.
 
 **Defaults:** compute week from `state.json.startDate`; no specific core;
 live scheduling on approval.
@@ -87,7 +89,7 @@ in order:
 
 | Step | Name | What happens |
 |---|---|---|
-| 1 | Compute this week's volume | Read `startDate` from `state.json`; apply `week = floor((today − startDate) / 7) + 1`; `perDayPerChannel = min(week, 4)`. If `startDate` is missing, stop and ask Brent. |
+| 1 | Compute this week's volume | Read `startDate` from `state.json`; apply `week = floor((today - startDate) / 7) + 1`; `perDayPerChannel = min(week, 4)`. If `startDate` is missing, stop and ask Brent. |
 | 2 | Re-verify accounts | `GET /users/me/accounts`; map platform → live `accountId`. Fetch `pageId` from FB subaccounts; mark FB SKIP if no Page found. |
 | 3 | Pull fresh material | Apply "Do, Then Share" source priority; enforce no-repeat guard against `usedIdeas`; if idea bank exhausted stop and ask Brent. |
 | 4 | Draft each post | Run `write-content` skill per idea; accept only drafts that pass all 5 criteria; never mutate copy. |
@@ -145,12 +147,12 @@ After all `POST /posts` calls succeed and `GET /schedules` confirms each post,
 present a summary table populated from live `GET /schedules` values — not
 inferred from `POST /posts` responses alone:
 
-| Platform | Account ID | Scheduled time (UTC) | Idea slug | Status |
-|---|---|---|---|---|
-| Facebook | {live accountId} | {ISO-8601 UTC from GET /schedules} | {slug} | Scheduled |
-| Instagram | {live accountId} | {ISO-8601 UTC from GET /schedules} | {slug} | Scheduled |
-| X | {live accountId} | {ISO-8601 UTC from GET /schedules} | {slug} | Scheduled |
-| YouTube | {live accountId} | {ISO-8601 UTC from GET /schedules} | {slug} | Scheduled / SKIPPED (no footage) |
+| Platform | Account ID | Scheduled time (UTC) | Post ID | Idea slug | Status |
+|---|---|---|---|---|---|
+| Facebook | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
+| Instagram | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
+| X | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
+| YouTube | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled / SKIPPED (no footage) |
 
 Follow with a SKIPPED section listing every post that was not scheduled, the
 platform, and the specific reason (no Page, missing required field, media
@@ -176,8 +178,9 @@ else is automatic:
   ones.
 - **State persists** — `state.json` is updated immediately after every approved
   batch; the next run picks up exactly where this one left off.
-- **Weekly trigger** — run `/cadence` (or its `/schedule` reminder) at the
-  start of each content week to keep the factory running.
+- **Weekly trigger** — run `/cadence` at the start of each content week to keep
+  the factory running; optionally set a `/schedule` reminder to trigger it
+  automatically.
 
 ---
 
