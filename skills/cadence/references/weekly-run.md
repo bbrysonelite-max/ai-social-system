@@ -28,6 +28,8 @@ Total posts to draft this week:
 total = perDayPerChannel × 3 channels × 7 days
 ```
 
+(YouTube excluded — best-effort, see Step 8)
+
 Example — Week 2: `2 × 3 × 7 = 42` posts (plus any YT slots if footage is available).
 
 Confirm the figure before proceeding. If `startDate` is missing from `state.json`, stop and ask Brent to confirm the ramp start date — do not assume.
@@ -64,9 +66,9 @@ This is Sabrina Ramonov's "Do, Then Share" playbook applied to Brent's business.
 
 **Source priority (highest to lowest):**
 
-1. **Brent's real receipts and journey this week** — things he actually did or learned: building Tiger, working his distribution network, team outcomes, process notes, screenshots, metrics. Document the journey even before big results land. A single concrete win → many posts.
+1. **Brent's real receipts and journey this week** — things he actually did or learned: building Tiger, working his distribution network, team outcomes, process notes, screenshots, metrics. Document the journey even before big results land. A single concrete win → many posts. Anchor in Brent's 39-year network-marketing track record wherever credibility context helps — this is a rare, earned proof point that sets him apart.
 
-2. **Repurposed cores** — feed a long-form source (the webinar recording, a YouTube script, a written-up case study, a field story) into Blotato's `POST /source-resolutions-v3` repurposing endpoint, poll until `status: completed`, then extract the content. One strong core → atomize it into many platform posts. This is high leverage. See `slots-and-rest.md` (Sources & visuals section) for the endpoint contract; hand extracted content to `write-content` for voice-true drafting — the raw extraction is never Brent's voice.
+2. **Repurposed cores** — feed a long-form source (the webinar recording, a YouTube script, a written-up case study, a field story) into Blotato's `POST /source-resolutions-v3` (the REST repurposing endpoint; same as `create_source` in the Blotato MCP) repurposing endpoint, poll until `status: completed`, then extract the content. One strong core → atomize it into many platform posts. This is high leverage. See `slots-and-rest.md` (Sources & visuals section) for the endpoint contract; hand extracted content to `write-content` for voice-true drafting — the raw extraction is never Brent's voice.
 
 3. **The idea bank** (`~/Desktop/Social Media Posts: Ideas/`) — use for fill when the above sources do not cover the week's volume.
 
