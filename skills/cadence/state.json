@@ -1,0 +1,28 @@
+{
+  "startDate": "2026-06-17",
+  "usedIdeas": [
+    "clone-the-leader-x",
+    "right-five-things-x",
+    "lead-the-moving-x"
+  ],
+  "scheduled": [
+    {
+      "postSubmissionId": "1af29dd8-c9cb-4bd8-895d-bdbc6d70ef4a",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-17T21:24:00Z",
+      "ideaRef": "clone-the-leader-x"
+    },
+    {
+      "postSubmissionId": "cf299378-e40b-498e-9c83-651965f923e1",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-18T01:00:00Z",
+      "ideaRef": "right-five-things-x"
+    },
+    {
+      "postSubmissionId": "59e36aa0-a260-4097-b8de-eb98cfafe540",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-18T15:00:00Z",
+      "ideaRef": "lead-the-moving-x"
+    }
+  ]
+}
