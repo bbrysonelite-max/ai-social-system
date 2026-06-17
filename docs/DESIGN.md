@@ -74,10 +74,55 @@ NOT connected yet:
 ⚠️ Connected-account list is Brent-reported; NOT yet verified against the live Blotato
 account. Verify first thing once the MCP tools load (task #4).
 
+## Messaging spine (drives EVERY post)
+
+**The frame: "What will Tiger do for your team?"**
+
+- Look **past the individual** — speak to leverage at the **team** level (current team:
+  everybody in it; or future team).
+- **Assume the reader is smart** enough to want a Tiger. Don't sell down; speak up.
+- The desire being served: **AI that is safe, duplicable, and real leverage / real value.**
+- Where Tiger delivers that: the **follow-up and coaching** part of the program
+  ("Fortune is in Follow-up" + duplication doctrine — "give them their own Tiger").
+
+This is leader-first positioning: the leverage is leaders (a leader = their whole team +
+white-label potential), not individual tool sales. Tiger is the **proof**, not the pitch.
+
+## CTAs / funnel (the two doors)
+
+Primary goal right now is **email list growth from zero** — every email is 100% growth.
+
+1. **Primary CTA (always): high-value lead magnet → email capture.** REUSE the existing,
+   working funnel in `bbrysonelite-max/Youtube-system/lead-magnet/` — do not rebuild:
+   - **Magnet:** "The Factory Blueprint — Your AI Agent Starter Kit for Network Marketers"
+     (`factory-blueprint.html`).
+   - **Newsletter:** "Agentic Loadout" (free weekly).
+   - **Email capture (EXISTS):** Stan Store `stan.store/brentbryson/p/factory-blueprint`
+     + Beehiiv option. (Resolves the email-capture dependency.)
+   - **Welcome sequence (EXISTS):** 3 emails / 7 days, FK Grade 8, in-voice.
+   - ⚠️ **Framing drift to resolve:** existing opt-in copy is *individual*-framed ("run
+     YOUR network marketing business"); current positioning is *team*-framed ("how AI helps
+     YOUR TEAM"). Confirm whether `factory-blueprint.html` is already team-framed inside, or
+     re-point the opt-in copy to the team-leverage spine.
+2. **Secondary CTA (sparingly, takeaway energy): open a conversation, not a sale.**
+   "If you run a team and want to see what this looks like for your group — let's talk."
+   This is the leader / white-label door.
+3. **"Get a Tiger" and "find an opportunity" come AFTER the relationship** — in the nurture
+   sequence and the conversation, segmented by who they are (team member / leader / prospect).
+   NOT the cold social CTA. Don't checkout-link Tiger on cold social.
+
+Warm-up caveat: during account warm-up, prefer reach-safe CTA mechanics (comment-to-get,
+DM keyword) over raw outbound links, which algorithms throttle on cold accounts.
+
+Note: this evolves Brent's 2026-04 "content is dead for lead gen" stance toward
+**high-value lead magnets built on earned proof** (not generic free content). Recorded
+intentionally. Dependency to resolve in the plan: lead-magnet asset(s) + email-capture
+mechanism (tool/landing page).
+
 ## Open calibration items (needed to flesh Skill 1)
 
 - [x] Platform set → Facebook, Instagram, YouTube, X (FB/IG first)
-- [ ] CTA / close (webinar → Cal.com? follow/subscribe? signature sign-off?)
+- [x] CTA / close → lead magnet → email (primary); Get-a-Tiger / find-NM-opportunity (secondary)
 - [ ] Hard "never say" list (income claims, NuSkin compliance, banned words)
 
 ## Open items pending Blotato MCP (Skill 2, post-restart)
