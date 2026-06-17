@@ -46,7 +46,7 @@ GET /users/me/accounts
 
 Map each platform (`facebook`, `instagram`, `twitter`) to its current `accountId`.
 
-For **Facebook**: call `GET /users/me/accounts/{facebookAccountId}/subaccounts` and extract the `pageId` (`items[0].id`). If Facebook has no connected Page, mark Facebook as **SKIP** for this run and surface:
+For **Facebook**: call `GET /users/me/accounts/{facebookAccountId}/subaccounts` and extract the `pageId` — prefer the known pageId `53954221244` if present in `items`, else fall back to `items[0].id`, else mark Facebook as **SKIP** for this run and surface:
 
 > "Facebook has no Page connected in Blotato — connect a Page (dashboard: 'Facebook pages: Don't see your pages? Help') to enable FB posting."
 
@@ -121,7 +121,7 @@ For **Facebook** and **X**: text-only posts are valid. Visuals are optional but 
 
 ### Visual generation procedure (per `slots-and-rest.md`)
 
-1. Discover available templates: `GET /videos/templates`
+1. Discover available templates: `GET /videos/templates` *(verify the visual path live before the first real IG batch — not yet smoke-tested)*
 2. Generate: `POST /videos/from-templates` with `templateId` (bare UUID only — not the full path), a prompt describing the desired visual, and `"render": true`.
 3. Poll: `GET /videos/creations/{id}` at 10-second intervals until `status` is `"done"`. This takes 30 seconds to 5 minutes — do not treat it as instant.
 4. Collect the `mediaUrl` or `imageUrls` from the completed response. These are the values to pass in `content.mediaUrls` when creating the post.

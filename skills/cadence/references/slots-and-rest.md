@@ -210,7 +210,7 @@ Body: {
 }
 ```
 
-Discover available templates: `GET /videos/templates`
+Discover available templates: `GET /videos/templates` *(verify the visual path live before the first real IG batch — not yet smoke-tested)*
 
 Poll until ready:
 

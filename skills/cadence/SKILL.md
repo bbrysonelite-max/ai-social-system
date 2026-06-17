@@ -52,11 +52,10 @@ weekly review-and-approve.
   repurposing endpoint (`POST /source-resolutions-v3`) and then to
   `write-content`. Useful when a webinar recording or long-form piece should
   anchor the week.
-- **`--dry-run`** — assemble and present the full batch (Steps 1–7) without
-  calling `POST /posts` or updating `state.json` (shows the assembled batch but
-  submits nothing — no `GET /schedules` confirmation appears). The approval gate
-  still runs; the confirmation that Brent would be approving real scheduling is
-  shown.
+- **`--dry-run`** — runs Steps 1–7 and shows the full batch at the gate but
+  submits nothing (no `POST /posts`, no state update). The approval gate still
+  runs so Brent can review; no `GET /schedules` confirmation appears because
+  nothing is scheduled.
 
 **Defaults:** compute week from `state.json.startDate`; no specific core;
 live scheduling on approval.
