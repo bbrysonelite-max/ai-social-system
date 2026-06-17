@@ -22,6 +22,21 @@ rejected in 2026-04). Different machine, different purpose.
 
 Human-in-the-loop review of every piece is non-negotiable.
 
+## Division of labor (IMPORTANT — Blotato = the repurposing engine)
+
+Brent chose Blotato specifically for its **repurposing** feature. So the two skills
+split like this, mirroring how Sabrina hits volume (write strong cores, repurpose — not
+write 250 originals):
+
+- **`write-content` (Skill 1)** — produce the **voice-true core** piece(s) in Brent's
+  voice. Quality and voice integrity, not volume.
+- **`blotato-post` (Skill 2)** — use **Blotato's repurposing** to atomize the core into
+  many platform-specific pieces + visuals (Nano Banana templates) + scheduling.
+
+Open question to resolve in the plan: how much per-platform tailoring `write-content`
+does up front vs. how much Blotato's repurposing handles — with the human review gate
+enforcing voice on whatever Blotato generates.
+
 ## Voice sources (canonical — do not fork prematurely)
 
 | Source | Role | Path |
@@ -59,11 +74,82 @@ NOT connected yet:
 ⚠️ Connected-account list is Brent-reported; NOT yet verified against the live Blotato
 account. Verify first thing once the MCP tools load (task #4).
 
+## Messaging spine (drives EVERY post)
+
+**The frame: "What will Tiger do for your team?"**
+
+- Look **past the individual** — speak to leverage at the **team** level (current team:
+  everybody in it; or future team).
+- **Assume the reader is smart** enough to want a Tiger. Don't sell down; speak up.
+- The desire being served: **AI that is safe, duplicable, and real leverage / real value.**
+- Where Tiger delivers that: the **follow-up and coaching** part of the program
+  ("Fortune is in Follow-up" + duplication doctrine — "give them their own Tiger").
+
+This is leader-first positioning: the leverage is leaders (a leader = their whole team +
+white-label potential), not individual tool sales. Tiger is the **proof**, not the pitch.
+
+## Audience filter (who we attract — and repel)
+
+Target: **leaders who think about their team, not themselves.** "My people: people who
+don't think about themselves, they think about their team." Content should *repel* the
+me-first individual and *attract* the team-first leader. Drumbeat: "your team."
+
+## Content pillars (team-benefit angles)
+
+Every piece answers a version of **"How does AI help your team?"**:
+1. **Inform your team** — keep a team current on AI without overwhelm.
+2. **Train your team** — AI as a duplicable training/coaching layer.
+3. **Make your team more effective** — follow-up + leverage (Tiger's heart).
+4. **Save your team money / time** — real value, "way more value than it costs".
+
+Tone: biography-as-credibility (never earnings), focus outside Brent, "value must exceed
+cost". See `skills/write-content/references/never-say.md`.
+
+## CTAs / funnel (the two doors)
+
+Primary goal right now is **email list growth from zero** — every email is 100% growth.
+
+1. **Primary CTA (always): high-value lead magnet → email capture.** REUSE the existing,
+   working funnel in `bbrysonelite-max/Youtube-system/lead-magnet/` — do not rebuild:
+   - **Magnet:** "The Factory Blueprint — Your AI Agent Starter Kit for Network Marketers"
+     (`factory-blueprint.html`).
+   - **Newsletter:** "Agentic Loadout" (free weekly).
+   - **Email capture (EXISTS):** Stan Store `stan.store/brentbryson/p/factory-blueprint`
+     + Beehiiv option. (Resolves the email-capture dependency.)
+   - **Welcome sequence (EXISTS):** 3 emails / 7 days, FK Grade 8, in-voice.
+   - ⚠️ **Framing drift to resolve:** existing opt-in copy is *individual*-framed ("run
+     YOUR network marketing business"); current positioning is *team*-framed ("how AI helps
+     YOUR TEAM"). Confirm whether `factory-blueprint.html` is already team-framed inside, or
+     re-point the opt-in copy to the team-leverage spine.
+2. **Secondary CTA (sparingly, takeaway energy): open a conversation, not a sale.**
+   "If you run a team and want to see what this looks like for your group — let's talk."
+   This is the leader / white-label door.
+3. **"Get a Tiger" and "find an opportunity" come AFTER the relationship** — in the nurture
+   sequence and the conversation, segmented by who they are (team member / leader / prospect).
+   NOT the cold social CTA. Don't checkout-link Tiger on cold social.
+
+Warm-up caveat: during account warm-up, prefer reach-safe CTA mechanics (comment-to-get,
+DM keyword) over raw outbound links, which algorithms throttle on cold accounts.
+
+Note: this evolves Brent's 2026-04 "content is dead for lead gen" stance toward
+**high-value lead magnets built on earned proof** (not generic free content). Recorded
+intentionally. Dependency to resolve in the plan: lead-magnet asset(s) + email-capture
+mechanism (tool/landing page).
+
 ## Open calibration items (needed to flesh Skill 1)
 
 - [x] Platform set → Facebook, Instagram, YouTube, X (FB/IG first)
-- [ ] CTA / close (webinar → Cal.com? follow/subscribe? signature sign-off?)
-- [ ] Hard "never say" list (income claims, NuSkin compliance, banned words)
+- [x] CTA / close → lead magnet → email (primary); Get-a-Tiger / find-NM-opportunity (secondary)
+- [x] Hard "never say" list → see `skills/write-content/references/never-say.md` (CONFIRMED)
+
+## Parked / backlog (separate workstreams — do NOT slop into write-content)
+
+- **Webinar workstream.** Brent wants to bank several webinars now (team-focused angle:
+  inform/train/effectiveness/savings), while top-of-mind. No webinar SKILL exists; the
+  webinar *build* lives in `bbrysonelite-max/Tiger-Webinar-Funnel` (`webinar-script.md`,
+  `heygen-production.md`, `booking-page.md`). Candidate **third skill** under
+  `ai-social-system` later. Re-point new webinars to the "your team" frame (the existing
+  one was self/opportunity-framed — fine, but the new ones lead with team).
 
 ## Open items pending Blotato MCP (Skill 2, post-restart)
 
