@@ -88,6 +88,23 @@ account. Verify first thing once the MCP tools load (task #4).
 This is leader-first positioning: the leverage is leaders (a leader = their whole team +
 white-label potential), not individual tool sales. Tiger is the **proof**, not the pitch.
 
+## Audience filter (who we attract — and repel)
+
+Target: **leaders who think about their team, not themselves.** "My people: people who
+don't think about themselves, they think about their team." Content should *repel* the
+me-first individual and *attract* the team-first leader. Drumbeat: "your team."
+
+## Content pillars (team-benefit angles)
+
+Every piece answers a version of **"How does AI help your team?"**:
+1. **Inform your team** — keep a team current on AI without overwhelm.
+2. **Train your team** — AI as a duplicable training/coaching layer.
+3. **Make your team more effective** — follow-up + leverage (Tiger's heart).
+4. **Save your team money / time** — real value, "way more value than it costs".
+
+Tone: biography-as-credibility (never earnings), focus outside Brent, "value must exceed
+cost". See `skills/write-content/references/never-say.md`.
+
 ## CTAs / funnel (the two doors)
 
 Primary goal right now is **email list growth from zero** — every email is 100% growth.
@@ -123,7 +140,16 @@ mechanism (tool/landing page).
 
 - [x] Platform set → Facebook, Instagram, YouTube, X (FB/IG first)
 - [x] CTA / close → lead magnet → email (primary); Get-a-Tiger / find-NM-opportunity (secondary)
-- [ ] Hard "never say" list (income claims, NuSkin compliance, banned words)
+- [x] Hard "never say" list → see `skills/write-content/references/never-say.md` (CONFIRMED)
+
+## Parked / backlog (separate workstreams — do NOT slop into write-content)
+
+- **Webinar workstream.** Brent wants to bank several webinars now (team-focused angle:
+  inform/train/effectiveness/savings), while top-of-mind. No webinar SKILL exists; the
+  webinar *build* lives in `bbrysonelite-max/Tiger-Webinar-Funnel` (`webinar-script.md`,
+  `heygen-production.md`, `booking-page.md`). Candidate **third skill** under
+  `ai-social-system` later. Re-point new webinars to the "your team" frame (the existing
+  one was self/opportunity-framed — fine, but the new ones lead with team).
 
 ## Open items pending Blotato MCP (Skill 2, post-restart)
 
