@@ -42,6 +42,8 @@ A post may be scheduled only if **all five criteria pass.** Run this check for e
 
 ### Rubric output format
 
+Verify criteria 2–5 BEFORE presenting to Brent; criterion 1 (Human-approved) is always `PENDING` at presentation time and flips to `PASS` only on his explicit approval.
+
 Print one line per post before the approval gate, like this:
 
 ```
@@ -69,7 +71,7 @@ New and reconnected accounts need a warm-up period before reaching audience. Bla
 
 ### Default mode: warm-up
 
-**This skill operates in warm-up mode by default.** The mode does not change until Brent explicitly says "switch to warm" or "ramp up." Until then, apply the warm-up constraints below to every post.
+**This skill operates in warm-up mode (Phase 1) by default.** The skill NEVER auto-advances phases. It advances only when Brent explicitly instructs it to — for example: "move to ramp," "advance to phase 2," "we're warm now, turn on links," or "go to full volume." The final account state is **"warm"** (reached at Phase 3 — scale — when reach is stable and Brent says so); "warm" is a Brent-declared destination, not something the skill reaches on its own. Until Brent gives an explicit advance instruction, apply the warm-up constraints below to every post.
 
 ### Volume targets
 
