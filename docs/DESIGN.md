@@ -52,7 +52,10 @@ Priority reflects following size, not platform hype:
 3. **YouTube** — long-form anchor (existing Youtube-system pipeline).
 4. **X** — almost no following → lowest priority, repurposing only.
 
-NOT connected: LinkedIn, TikTok (bios exist but accounts not linked).
+NOT connected yet:
+- **LinkedIn** — Brent wants to add this; account is not on a paid plan. Likely add once
+  upgraded (LinkedIn favors long-form + infographics — strong fit for authority content).
+- **TikTok** — bio exists, not linked.
 ⚠️ Connected-account list is Brent-reported; NOT yet verified against the live Blotato
 account. Verify first thing once the MCP tools load (task #4).
 
