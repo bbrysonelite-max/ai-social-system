@@ -1,0 +1,221 @@
+# Weekly-Run Procedure
+
+**Date:** 2026-06-17
+**Source:** `docs/superpowers/specs/2026-06-17-cadence-system-design.md` (Architecture § Weekly-run procedure).
+
+---
+
+> **Scope of this file:** the ordered 8-step weekly batch procedure. Volume arithmetic and `state.json` rules are in `ramp-and-state.md`. Blotato REST endpoints and slot mechanics are in `slots-and-rest.md`. Drafting and voice are in `skills/write-content/SKILL.md`. Distribution tooling and the safety rubric are in `skills/blotato-post/SKILL.md`.
+
+---
+
+## Step 1 — Compute this week's volume
+
+Read `state.json` (`skills/cadence/state.json`) and extract `startDate`.
+
+Apply the arithmetic from `ramp-and-state.md`:
+
+```
+week             = floor((today - startDate) / 7) + 1
+perDayPerChannel = min(week, 4)
+```
+
+The active channels for each day are **Facebook, Instagram, and X**. YouTube is best-effort (see Step 8).
+
+Total posts to draft this week:
+
+```
+total = perDayPerChannel × 3 channels × 7 days
+```
+
+Example — Week 2: `2 × 3 × 7 = 42` posts (plus any YT slots if footage is available).
+
+Confirm the figure before proceeding. If `startDate` is missing from `state.json`, stop and ask Brent to confirm the ramp start date — do not assume.
+
+---
+
+## Step 2 — Re-verify accounts
+
+Account IDs change on reconnect. Always fetch live IDs at the start of every run.
+
+```
+GET /users/me/accounts
+```
+
+Map each platform (`facebook`, `instagram`, `twitter`) to its current `accountId`.
+
+For **Facebook**: call `GET /users/me/accounts/{facebookAccountId}/subaccounts` and extract the `pageId` (`items[0].id`). If Facebook has no connected Page, mark Facebook as **SKIP** for this run and surface:
+
+> "Facebook has no Page connected in Blotato — connect a Page (dashboard: 'Facebook pages: Don't see your pages? Help') to enable FB posting."
+
+If any expected platform is absent from the live response, log the skip and continue with the remaining channels.
+
+See `slots-and-rest.md` (Auth + Accounts section) for the full endpoint contract and response shape.
+
+---
+
+## Step 3 — Pull fresh material (content supply)
+
+Pick enough ideas to cover the week's full volume (Step 1 total), applying the **no-repeat guard**: before selecting any idea, confirm its slug is **not** already in `state.json.usedIdeas`. Skip any idea whose slug appears there.
+
+### Do, Then Share — content strategy
+
+This is Sabrina Ramonov's "Do, Then Share" playbook applied to Brent's business. Prioritize real, earned material before reaching for the idea bank.
+
+**Source priority (highest to lowest):**
+
+1. **Brent's real receipts and journey this week** — things he actually did or learned: building Tiger, working his distribution network, team outcomes, process notes, screenshots, metrics. Document the journey even before big results land. A single concrete win → many posts.
+
+2. **Repurposed cores** — feed a long-form source (the webinar recording, a YouTube script, a written-up case study, a field story) into Blotato's `POST /source-resolutions-v3` repurposing endpoint, poll until `status: completed`, then extract the content. One strong core → atomize it into many platform posts. This is high leverage. See `slots-and-rest.md` (Sources & visuals section) for the endpoint contract; hand extracted content to `write-content` for voice-true drafting — the raw extraction is never Brent's voice.
+
+3. **The idea bank** (`~/Desktop/Social Media Posts: Ideas/`) — use for fill when the above sources do not cover the week's volume.
+
+**Do, Then Share principles to apply:**
+
+- Lead with **proof and what was learned**, not generic AI filler. A real win first, then repurpose it many ways.
+- Free education comes first; Tiger or the lead magnet is the CTA (not the lede).
+- "Repurpose one win 20 ways" — a single result or story can cover an entire week across platforms if atomized correctly.
+- Vary angles per platform: a stat becomes an IG visual, an insight becomes an X thread, a story becomes a Facebook post.
+
+**No-repeat guard:** For every candidate idea or story, generate or confirm a slug (a short identifier, e.g. `"webinar-launch-june-17"` or `"tiger-rebuild-week-3"`). Skip any slug already present in `state.json.usedIdeas`. If the idea bank is exhausted (all slugs appear in `usedIdeas`), stop and report this to Brent before continuing — ask which ideas may be recycled.
+
+Collect the selected ideas with their slugs before proceeding to Step 4.
+
+---
+
+## Step 4 — Draft each post
+
+Run the `write-content` skill (Skill 1) for each selected idea.
+
+- Supply the idea, any supporting receipt/file, and the target platforms for that idea (FB, IG, X — or a subset if the idea fits fewer platforms).
+- `write-content` handles: voice, pillar selection, CTA mode, per-platform format, and the 5-criterion self-review gate. All five criteria must pass before a draft is accepted.
+- Do not mutate copy after `write-content` produces it. If copy must change for any reason, re-run `write-content`.
+- `write-content` enforces cadence variety across a batch. If fewer than 3 distinct cadences appear in a batch of 3+ drafts, it will revise before showing output.
+
+The `write-content` skill does not post, schedule, or generate images. Collect all approved drafts and pass them forward.
+
+---
+
+## Step 5 — Build visuals
+
+For every **Instagram** post, generate a visual before scheduling. Instagram requires at least one image/video URL — caption-only posts are not supported via the API.
+
+For **Facebook** and **X**: text-only posts are valid. Visuals are optional but recommended for reach. Generate them when a visual adds clear value and templates are available.
+
+### Visual generation procedure (per `slots-and-rest.md`)
+
+1. Discover available templates: `GET /videos/templates`
+2. Generate: `POST /videos/from-templates` with `templateId` (bare UUID only — not the full path), a prompt describing the desired visual, and `"render": true`.
+3. Poll: `GET /videos/creations/{id}` at 10-second intervals until `status` is `"done"`. This takes 30 seconds to 5 minutes — do not treat it as instant.
+4. Collect the `mediaUrl` or `imageUrls` from the completed response. These are the values to pass in `content.mediaUrls` when creating the post.
+
+If visual generation fails for an Instagram post, skip that post for this run and surface the reason. Do not block the rest of the batch.
+
+---
+
+## Step 6 — Assign to slots
+
+Ensure this week's schedule slots exist in Blotato, then assign posts to them.
+
+### Slot count check
+
+From `slots-and-rest.md` (Ramping rule): Week N has N slots/day/channel (capped at 4).
+
+1. Call `GET /schedule/slots` and count existing slots per channel per day.
+2. If the current week requires more slots than exist, create the additional ones via `POST /schedule/slots`. Do not duplicate slots with the same `hour`/`minute`/`day`/`selectedTargets` combination. Never delete existing slots.
+
+### Assign posts to days/times
+
+Distribute the week's posts across the 7-day window, matching post volume per day to `perDayPerChannel`. Two assignment options (from `slots-and-rest.md`):
+
+- **Explicit scheduling:** set `scheduledTime` (ISO-8601 UTC) on each post. Use `POST /schedule/slots/next-available` to find the next open slot per channel if needed.
+- **Slot-based:** set `useNextFreeSlot: true` to let Blotato assign to the next available slot for that channel. Do not combine with `scheduledTime`.
+
+Record the intended scheduled time for each post — this is needed for the approval presentation in Step 7.
+
+---
+
+## Step 7 — Present batch + approval gate
+
+Present the **full batch** before calling `POST /posts` for any post. Nothing is scheduled without Brent's explicit approval.
+
+### Presentation format
+
+For each post, show:
+
+- **Platform** and live `accountId`
+- **Exact post text** (character-for-character from `write-content`)
+- **Visual URL or preview** (if applicable)
+- **Scheduled time** (ISO-8601 UTC)
+- **Idea slug** (for traceability)
+
+Follow the `blotato-post` safety rubric — run criteria 2–5 now; criterion 1 (Human-approved) is PENDING until Brent approves:
+
+```
+[Platform] [AccountId] — Human-approved: PENDING | Account-valid: PASS | Voice/compliance: PASS | Warm-up: PASS | Media-valid: PASS
+```
+
+Any criterion at FAIL: skip that post with a clear reason. Do not include it in the approval prompt.
+
+### Skip handling
+
+- **Facebook with no Page:** skip cleanly with the message from Step 2.
+- **Any platform missing required fields** (IG missing `mediaUrl`, YT missing `title`): skip with a specific message. Do not block the rest of the batch.
+- List all skipped posts in a SKIPPED section below the gate.
+
+### The approval gate
+
+**Wait for Brent's explicit approval.** "Yes," "approved," "go," or equivalent. Silence or "looks good" without a clear affirmative is not approval. If Brent requests a change, do not call `POST /posts` — revise and re-present.
+
+**If unsure whether a post is over a line, ask Brent — he decides.**
+
+---
+
+## Step 8 — Schedule + update state
+
+On Brent's explicit approval:
+
+### Schedule each approved post
+
+For each approved post, call `POST /posts` with:
+- All assembled fields (accountId, content.text, content.platform, target.targetType, platform-specific required fields)
+- `scheduledTime` (ISO-8601 UTC) at root level — **not** nested inside `post` (see `slots-and-rest.md` common mistakes)
+- Or `useNextFreeSlot: true` if slot-based assignment was chosen in Step 6
+
+### Confirm scheduling
+
+After each `POST /posts`, call `GET /schedules` and verify the post appears with the correct time and platform. Do not claim a post is scheduled without confirmation from `GET /schedules`.
+
+### Update state.json
+
+After all `POST /posts` calls succeed:
+
+1. **Append to `usedIdeas`** — add the slug of every idea used in this batch. Check before appending; do not add duplicates.
+2. **Append to `scheduled`** — add one entry per submitted post:
+
+```json
+{
+  "postSubmissionId": "<UUID returned by POST /posts>",
+  "platform": "<platform string>",
+  "scheduledTime": "<ISO-8601 UTC>",
+  "ideaRef": "<idea slug>"
+}
+```
+
+3. Do not touch `startDate` — it is set once at initialization and never changed.
+4. `usedIdeas` and `scheduled` are append-only ledgers. Never remove entries.
+
+### YouTube — best-effort only
+
+YouTube is not part of the 3-channel daily volume (FB/IG/X). Post to YouTube only when repurposed footage or a video Brent has already produced is available. Do not generate 4 fresh videos/day from scratch. If no footage is available for a YT slot, skip it cleanly with a note and do not block the batch or the state update.
+
+### Completion summary
+
+Present a summary table of what was scheduled and what was skipped, populated from live `GET /schedules` confirmation values — not from the `POST /posts` response alone.
+
+| Platform | Account ID | Scheduled time (UTC) | Post ID | Status |
+|---|---|---|---|---|
+| Facebook | … | … | … | Scheduled / SKIPPED |
+| Instagram | … | … | … | Scheduled / SKIPPED |
+| X | … | … | … | Scheduled / SKIPPED |
+| YouTube | … | … | … | Scheduled / SKIPPED (no footage) |
