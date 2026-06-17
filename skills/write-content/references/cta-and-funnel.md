@@ -19,7 +19,8 @@ Every cold social post should point to the lead magnet, never directly to produc
 - Welcome sequence exists: 3 emails / 7 days, FK Grade 8, in-voice
 - Email capture exists: Stan Store (link above) + Beehiiv option
 
-**Framing note:** Verify whether `factory-blueprint.html` is already team-framed ("how AI helps YOUR TEAM") or if opt-in copy needs re-pointing from individual-framed ("run YOUR business").
+> NOTE (non-normative — open question, not a rule):
+> Verify whether `factory-blueprint.html` is already team-framed ("how AI helps YOUR TEAM") or if opt-in copy needs re-pointing from individual-framed ("run YOUR business").
 
 ---
 

@@ -1,6 +1,6 @@
 # Brent Bryson Voice Reference
 
-This file is the single source of truth for the write-content skill. Load it once and stay true to it.
+This file is distilled from `Youtube-system/identity/SOUL_DOCUMENT.md` and supersedes it for this skill's runtime. Load it once and stay true to it.
 
 ---
 
@@ -68,6 +68,10 @@ Rhythmic sentence patterns that define Brent's voice. Each cadence is a structur
 
 ---
 
+**Batch variety:** across any batch of 3+ drafts, use at least 3 DIFFERENT named cadences, and deploy at least one verbatim signature phrase other than "Way more value than they cost" and "the fortune is in the follow-up."
+
+---
+
 ## Signature phrases
 
 Deploy these verbatim. Never paraphrase.
@@ -96,12 +100,13 @@ These rules serve the voice, not the page. Every formatting decision exists so t
 - Short sentences after long ones. Always.
 - Never more than 2 commas before a period.
 - Maximum 20 words per sentence. Flag and revise anything longer.
-- Rhetorical questions every 90 seconds minimum.
+- One rhetorical question per post, where it lands naturally — never forced.
 - Flesch-Kincaid target: Grade 8 or below.
 
 **What to avoid:**
 - Corporate language: leverage synergies, value proposition, utilize
 - Filler phrases: "So basically...", "What I mean is...", "Kind of like..."
+- Folksy address terms: "folks", "friend", "my friend"
 - Passive voice: "It was decided" → "I decided"
 - Three consecutive sentences starting with "I"
 - Walls of unbroken text — break every 2-3 sentences

@@ -28,6 +28,8 @@ does it serve his team?"** If no — rewrite before showing it.
   around).
 - **Optional target platforms.** Default: **Facebook + Instagram**. Add
   **YouTube** and/or **X** only when Brent asks for them.
+- **Optional account state:** `warm | warm-up` (default: `warm-up`). Drives CTA
+  mode — warm-up prefers reach-safe mechanics; warm allows direct links.
 
 ---
 
@@ -85,6 +87,16 @@ rubric result line per draft** in the output.
 ```
 
 If any criterion is ❌, the draft is not ready — rewrite, then re-run the gate.
+
+**Batch cadence check (after the per-draft lines):** Print one summary line
+listing the named cadences used across the whole batch:
+
+```
+Cadences used this batch: [Reframe Correction, Anaphoric Stack, Isolated Beat]
+```
+
+If a batch of 3+ drafts uses **fewer than 3 distinct cadences**, revise before
+showing the output. (Prevents voice narrowing — see `voice.md` Batch variety.)
 
 ---
 

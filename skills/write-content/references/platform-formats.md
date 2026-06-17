@@ -14,7 +14,8 @@
 | **YouTube** | ANCHOR | Long-form; training + lead magnet funnel |
 | **X** | LOW | Almost no following; repurposing only |
 
-⚠️ **Not yet verified:** Connected-account list is Brent-reported; NOT yet verified against live Blotato account. Verify once MCP tools load.
+> NOTE (non-normative — planning flag, not a rule):
+> Connected-account list is Brent-reported; NOT yet verified against live Blotato account. Verify once MCP tools load.
 
 ---
 
@@ -132,7 +133,7 @@ You can't be on five calls at once. Your training can. AI isn't magic — it's d
 
 - **Audience ~85% women:** Tune voice warm, relational, team-focused. Avoid "boss" energy or individual-hustle framing.
 - **Never earnings claims:** No income/guarantee language. Focus on leverage, duplication, and value. See `skills/write-content/references/never-say.md`.
-- **Brand voice across all:** Brent's broadcast voice ("AI for the Rest of Us") driven by `Youtube-system/identity/SOUL_DOCUMENT.md`, not Tiger's 1:1 conversational voice.
+- **Brand voice across all:** Brent's broadcast voice ("AI for the Rest of Us"), defined for this skill by `skills/write-content/references/voice.md`, not Tiger's 1:1 conversational voice.
 - **Blotato repurposing:** These rules set the boundaries; Blotato's repurposing engine handles the atomization and visual generation within them.
 
 See also: `docs/DESIGN.md` division of labor section for how `write-content` (Skill 1) and `blotato-post` (Skill 2) split the work.
