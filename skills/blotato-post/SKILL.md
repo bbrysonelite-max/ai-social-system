@@ -44,8 +44,9 @@ never rewrites copy. If copy must change for platform fit, re-run `write-content
   unless Brent explicitly says "post now").
 
 - **Optional: account state** (`warm-up` | `ramp` | `scale`). Default = `warm-up`.
-  Drives CTA and volume constraints. See `references/safety-and-warmup.md` for
-  phase definitions. The skill never auto-advances phases.
+  Drives CTA and volume constraints. Read `references/safety-and-warmup.md` for phase
+  definitions — ramp constraints affect CTA wording downstream. The skill never
+  auto-advances phases.
 
 ---
 
@@ -226,10 +227,10 @@ Present a summary table of what was scheduled and what was skipped:
 
 | Platform | Account ID | Scheduled time (UTC) | Link / Post ID | Status |
 |---|---|---|---|---|
-| Facebook | 37125 | 2026-06-18T14:00:00Z | [post-id or URL] | Scheduled |
-| Instagram | 53674 | 2026-06-18T14:30:00Z | [post-id or URL] | Scheduled |
-| YouTube | 27755 | 2026-06-18T16:00:00Z | [post-id or URL] | Scheduled |
-| X | 12730 | 2026-06-18T14:00:00Z | [post-id or URL] | SKIPPED — [reason] |
+| Facebook | {accountId from blotato_list_accounts} | {ISO-8601 UTC from blotato_list_schedules} | {post-id from blotato_list_schedules} | Scheduled |
+| Instagram | {accountId from blotato_list_accounts} | {ISO-8601 UTC from blotato_list_schedules} | {post-id from blotato_list_schedules} | Scheduled |
+| YouTube | {accountId from blotato_list_accounts} | {ISO-8601 UTC from blotato_list_schedules} | {post-id from blotato_list_schedules} | Scheduled |
+| X | {accountId from blotato_list_accounts} | {ISO-8601 UTC from blotato_list_schedules} | {post-id from blotato_list_schedules} | SKIPPED — {reason} |
 
 Populate with live values from the `blotato_list_schedules` confirmation. Never fill
 the table from the `create_post` response alone.
