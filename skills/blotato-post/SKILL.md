@@ -205,6 +205,8 @@ On explicit approval:
 1. Flip `Human-approved: PENDING` → `PASS` in the rubric record.
 2. Call `blotato_create_post` for each approved post with all assembled fields.
    `scheduledTime` must be set (ISO-8601 UTC) unless Brent said "post now."
+   If Brent says "use the next free slot," use `useNextFreeSlot: true` instead of
+   an explicit `scheduledTime` — still gated, still never immediate without approval.
 3. After each `create_post`, confirm via `blotato_list_schedules` — verify the post
    appears in the schedule with the correct time and platform.
 4. Optionally call `blotato_get_schedule` on a specific post ID to confirm a single

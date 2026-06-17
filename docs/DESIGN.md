@@ -189,3 +189,5 @@ mechanism (tool/landing page).
 - [x] **Brent action:** connect a Facebook **Page** in Blotato — DONE 2026-06-17 (Page `53954221244`); all 4 channels now postable
 - [ ] Build Skill 2 (`blotato-post`) against the verified surface — via three-agent rule
 - [ ] Account warm-up ramp before scaling to factory volume (see `account-warm-up-plan.md`, PR #4)
+
+> **Drift note:** the canonical warm-up ramp content (phases, volume targets, hard rules) also lives in `skills/blotato-post/references/safety-and-warmup.md`. Keep that file and `docs/account-warm-up-plan.md` (PR #4) in sync — do not let them diverge.

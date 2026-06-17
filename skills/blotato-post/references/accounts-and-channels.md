@@ -37,9 +37,11 @@ These are the fields Blotato requires beyond `accountId` + `content` when callin
 - Carousel: pass multiple image URLs in `mediaUrls`.
 
 **YouTube**
+- YouTube via Blotato is a **video upload**, not a community/text post.
 - `title` (required — no title, no post).
 - `privacyStatus`: `public` | `private` | `unlisted`.
 - `shouldNotifySubscribers`: `true` | `false`.
+- A video file URL must be included in `mediaUrls` — YouTube posts require a video.
 
 **X/Twitter**
 - No extra required fields beyond `accountId` + `content`.

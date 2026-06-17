@@ -50,7 +50,7 @@ Print one line per post before the approval gate, like this:
 [Platform] [AccountId] — Human-approved: PENDING | Account-valid: PASS | Voice/compliance: PASS | Warm-up: PASS | Media-valid: PASS
 ```
 
-Replace `PENDING` with `PASS` only after Brent has given explicit approval in this session. A post with any criterion at `FAIL` or `PENDING` is **not schedulable.**
+Replace `PENDING` with `PASS` only after Brent has given explicit approval in this session. A post with any criterion at `FAIL` is **not schedulable** — skip it with a clear reason. A post with criterion 1 at `PENDING` is **held at the gate** until Brent's explicit approval flips it to `PASS`; once all criteria are `PASS` the post may be scheduled.
 
 Example (pre-approval presentation):
 
@@ -72,6 +72,11 @@ New and reconnected accounts need a warm-up period before reaching audience. Bla
 ### Default mode: warm-up
 
 **This skill operates in warm-up mode (Phase 1) by default.** The skill NEVER auto-advances phases. It advances only when Brent explicitly instructs it to — for example: "move to ramp," "advance to phase 2," "we're warm now, turn on links," or "go to full volume." The final account state is **"warm"** (reached at Phase 3 — scale — when reach is stable and Brent says so); "warm" is a Brent-declared destination, not something the skill reaches on its own. Until Brent gives an explicit advance instruction, apply the warm-up constraints below to every post.
+
+> **Vocabulary mapping — `write-content` ↔ `blotato-post`:** `write-content` uses a two-state axis (`warm-up` | `warm`) to drive CTA mode. These map onto this skill's three phases at different granularity:
+> - `write-content` **`warm-up`** ↔ this skill's **Phase 1 (warm-up)** — native-value posts, reach-safe CTAs, no external links.
+> - `write-content` **`warm`** (direct links allowed) ↔ this skill's **Phase 2 (ramp) or Phase 3 (scale)** — `warm` in write-content means the account has passed the cold/warm threshold, not that it has reached maximum volume. A `warm` draft from write-content is therefore treated here as Phase 2+ content (soft or direct CTAs are acceptable), NOT as still-cold. Brent must have explicitly advanced to ramp or scale before such a draft is scheduled.
+> The three-phase model here is more granular than write-content's two-state model; both describe the same underlying account readiness axis.
 
 ### Volume targets
 

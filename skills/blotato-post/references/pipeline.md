@@ -56,8 +56,8 @@ There are two paths: generate a visual from a Blotato template, or upload an
 existing local asset (e.g. a Desktop infographic).
 
 **IG requires a visual.** Every Instagram post must be visual-first (story, reel, or
-carousel). Facebook and X may be text-only; YouTube community posts may include an
-image but it is not required.
+carousel). Facebook and X may be text-only. **YouTube via Blotato is a video upload
+(not a community/text post) — a video file URL is required in `mediaUrls`.**
 
 ### Path 1 — Generate from a template
 
