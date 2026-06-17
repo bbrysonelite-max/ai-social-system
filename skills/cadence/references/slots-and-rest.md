@@ -225,6 +225,7 @@ All fields below go inside `target` unless noted.
 | Platform | Required fields | Notes |
 |---|---|---|
 | **twitter** | none | Thread continuation via `content.additionalPosts[]`. |
+| **threads** | none | Thread continuation via `content.additionalPosts[]` (same pattern as twitter/bluesky). |
 | **facebook** | `target.pageId` | Fetch `pageId` from `/users/me/accounts/{id}/subaccounts` → `items[].id`. Also: `mediaType: "reel"` for video; `mediaType: "story"` for story; omit `mediaType` for text or image feed post. |
 | **instagram** | `target.mediaType` (`"reel"` or `"story"`) + at least one URL in `content.mediaUrls` | Default `mediaType` is `"reel"`. No caption-only feed post — a media URL is always required. |
 | **youtube** | `target.title` (required), `target.privacyStatus` (`"private"` \| `"public"` \| `"unlisted"`) (required), `target.shouldNotifySubscribers` (boolean, required) | `content.text` = video description. A video file URL is required in `content.mediaUrls`. |
