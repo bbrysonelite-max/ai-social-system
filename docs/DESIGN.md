@@ -33,9 +33,29 @@ write 250 originals):
 - **`blotato-post` (Skill 2)** — use **Blotato's repurposing** to atomize the core into
   many platform-specific pieces + visuals (Nano Banana templates) + scheduling.
 
-Open question to resolve in the plan: how much per-platform tailoring `write-content`
-does up front vs. how much Blotato's repurposing handles — with the human review gate
-enforcing voice on whatever Blotato generates.
+**Resolved (2026-06-17, after mapping the live Blotato tool surface):** there is no
+one-click "atomize into N platform posts" MCP call. Blotato's repurposing surface is:
+`create_source` (extract/summarize a long-form core — YouTube transcript, TikTok, article,
+PDF, audio, tweet, raw text, or a Perplexity research query, with `customInstructions`).
+So the split is:
+- **`write-content`** owns the voice-true per-platform tailoring (the intelligence).
+- **`blotato-post`** uses `create_source` to pull the core, `create_visual` for visuals,
+  and `create_post` to publish/schedule per platform. The human gate enforces voice on
+  anything generated before it schedules.
+
+### Blotato tool surface (mapped 2026-06-17)
+- **Accounts:** `blotato_list_accounts`, `blotato_get_user`.
+- **Sources (repurposing input):** `blotato_create_source` (8 source types) +
+  `blotato_get_source_status` (poll long extractions).
+- **Visuals (Nano Banana / templates):** `blotato_create_visual` (slideshows, quote cards,
+  carousels, infographics, AI videos), `blotato_list_visual_templates`,
+  `blotato_get_visual_status`, `blotato_create_presigned_upload_url` (upload own assets →
+  public URL; use for the Desktop infographics).
+- **Publish / schedule:** `blotato_create_post` (immediate, `scheduledTime` ISO-8601, or
+  `useNextFreeSlot`; threads via `additionalPosts`), `blotato_get_post_status`,
+  `blotato_list_posts`, and schedule management (`list`/`get`/`update`/`delete_schedule`).
+- Note: `mediaUrls` must be **publicly accessible URLs** — `create_visual` returns them;
+  use `create_presigned_upload_url` for local files.
 
 ## Voice sources (canonical — do not fork prematurely)
 
@@ -58,21 +78,30 @@ voice** — NOT the broadcast voice. Do not use it for posts.
 
 Bios for product accounts exist in `tiger-claw-marketing-restore/brand/social-bios.json`.
 
-## Connected channels (per Brent, 2026-06-17 — to be live-verified via Blotato MCP next session)
+## Connected channels (LIVE-VERIFIED via Blotato MCP, 2026-06-17)
 
-Priority reflects following size, not platform hype:
+Verified against the live Blotato account (`blotato_list_accounts` + dashboard screenshot).
+Subscription active. 0 posts scheduled (clean slate). Priority reflects following size:
 
-1. **Facebook** — biggest following → primary. Conversational, community storytelling.
-2. **Instagram** — second-biggest → primary. Visual, caption-led.
-3. **YouTube** — long-form anchor (existing Youtube-system pipeline).
-4. **X** — almost no following → lowest priority, repurposing only.
+| # | Platform | Blotato account ID | Account | Posting requirement |
+|---|---|---|---|---|
+| 1 | **Facebook** (primary) | `20306` | Brent Bryson | requires `pageId` from a subaccount (a Facebook **Page**) |
+| 2 | **Instagram** (primary) | `53674` | @brentbryson | `mediaType` = `story` or `reel` (visual-first, not plain feed caption) |
+| 3 | **YouTube** (anchor) | `27755` | Brent Bryson | `title` + `privacyStatus` (public/private/unlisted) |
+| 4 | **X** (low) | `12730` | @pebobryson801 | none; supports threads via `additionalPosts` |
 
-NOT connected yet:
-- **LinkedIn** — Brent wants to add this; account is not on a paid plan. Likely add once
-  upgraded (LinkedIn favors long-form + infographics — strong fit for authority content).
+⚠️ **Facebook Page gap (action for Brent).** The Facebook account is connected as a profile
+but **no Page is linked** (`subaccounts: []`; dashboard shows "Facebook pages: Don't see your
+pages? Help"). Blotato requires a `pageId` to post to Facebook, so the biggest channel is
+**not postable until a Page is connected** in the Blotato dashboard. Resolve before FB goes live.
+
+⚠️ **Instagram is story/reel only** via the API — there is no plain caption-only feed post.
+IG drafts from `write-content` must be visual-first (image/carousel/reel with caption).
+
+NOT connected (confirmed absent from the live account):
+- **LinkedIn** — Brent wants to add this; account is not on a paid plan. Add once upgraded
+  (LinkedIn favors long-form + infographics — strong fit for authority content).
 - **TikTok** — bio exists, not linked.
-⚠️ Connected-account list is Brent-reported; NOT yet verified against the live Blotato
-account. Verify first thing once the MCP tools load (task #4).
 
 ## Messaging spine (drives EVERY post)
 
@@ -151,8 +180,10 @@ mechanism (tool/landing page).
   `ai-social-system` later. Re-point new webinars to the "your team" frame (the existing
   one was self/opportunity-framed — fine, but the new ones lead with team).
 
-## Open items pending Blotato MCP (Skill 2, post-restart)
+## Open items pending Blotato MCP (Skill 2)
 
-- [ ] Enumerate connected channels in the Blotato account
-- [ ] Map Blotato tool surface (publish, media/visual gen, scheduling)
-- [ ] Account warm-up ramp before scaling to factory volume
+- [x] Enumerate connected channels in the Blotato account — DONE 2026-06-17 (4 channels, table above)
+- [x] Map Blotato tool surface (publish, media/visual gen, scheduling) — DONE 2026-06-17 (surface above)
+- [ ] **Brent action:** connect a Facebook **Page** in Blotato (FB not postable until then)
+- [ ] Build Skill 2 (`blotato-post`) against the verified surface — via three-agent rule
+- [ ] Account warm-up ramp before scaling to factory volume (see `account-warm-up-plan.md`, PR #4)
