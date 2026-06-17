@@ -22,6 +22,21 @@ rejected in 2026-04). Different machine, different purpose.
 
 Human-in-the-loop review of every piece is non-negotiable.
 
+## Division of labor (IMPORTANT — Blotato = the repurposing engine)
+
+Brent chose Blotato specifically for its **repurposing** feature. So the two skills
+split like this, mirroring how Sabrina hits volume (write strong cores, repurpose — not
+write 250 originals):
+
+- **`write-content` (Skill 1)** — produce the **voice-true core** piece(s) in Brent's
+  voice. Quality and voice integrity, not volume.
+- **`blotato-post` (Skill 2)** — use **Blotato's repurposing** to atomize the core into
+  many platform-specific pieces + visuals (Nano Banana templates) + scheduling.
+
+Open question to resolve in the plan: how much per-platform tailoring `write-content`
+does up front vs. how much Blotato's repurposing handles — with the human review gate
+enforcing voice on whatever Blotato generates.
+
 ## Voice sources (canonical — do not fork prematurely)
 
 | Source | Role | Path |
