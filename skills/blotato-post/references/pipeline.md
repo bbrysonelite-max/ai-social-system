@@ -121,6 +121,9 @@ sign-off.
 After scheduling, confirm with **`blotato_list_schedules`** — verify the post
 appears in the schedule with the correct time and platform.
 
+- **`blotato_get_schedule`** — retrieve a single schedule by its ID (e.g. to
+  confirm one specific scheduled post before its fire time), as distinct from
+  `blotato_list_schedules` which returns the whole queue.
 - **`blotato_get_post_status`** — check delivery status of a specific post after
   the scheduled time has passed.
 - **`blotato_list_posts`** — review post history.
@@ -133,9 +136,9 @@ appears in the schedule with the correct time and platform.
 
 | Issue | What to do |
 |---|---|
-| `mediaUrls` not public | Never pass local paths or private URLs. Use `create_visual` (returns public URL) or `create_presigned_upload_url` (upload → public URL). |
+| `mediaUrls` not public | Never pass local paths or private URLs. Use `blotato_create_visual` (returns public URL) or `blotato_create_presigned_upload_url` (upload → public URL). |
 | Instagram plain caption | IG has no caption-only feed post via the API. Every IG post requires `mediaType: story` or `reel` and at least one image/video URL. |
 | Visual gen is async | `create_visual` kicks off a job — poll `get_visual_status` until `completed`. Do not assume the visual is ready immediately. |
-| Account IDs change on reconnect | FB account changed `20306` → `37125` on 2026-06-17. Always call `blotato_list_accounts` first; map live IDs before posting. See accounts-and-channels.md § "Runtime rule." |
+| Account IDs change on reconnect | Account IDs can change on reconnect — re-verify via `blotato_list_accounts`; see `accounts-and-channels.md`. Always call `blotato_list_accounts` first; map live IDs before posting. |
 | `create_source` is not voice | The extraction is raw summarization, not Brent's voice. Hand the core to `write-content` before drafting platform posts. |
 | Scheduling default | Always set `scheduledTime` (ISO-8601 UTC) unless Brent explicitly says "post now." Never omit it silently. |
