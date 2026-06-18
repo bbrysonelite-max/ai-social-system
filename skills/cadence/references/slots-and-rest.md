@@ -234,7 +234,7 @@ All fields below go inside `target` unless noted.
 | **threads** | none | Thread continuation via `content.additionalPosts[]` (same pattern as twitter/bluesky). |
 | **facebook** | `target.pageId` | Fetch `pageId` from `/users/me/accounts/{id}/subaccounts` → `items[].id`. Also: `mediaType: "reel"` for video; `mediaType: "story"` for story; omit `mediaType` for text or image feed post. |
 | **instagram** | `target.mediaType` (`"reel"` or `"story"`) + at least one URL in `content.mediaUrls` | Default `mediaType` is `"reel"`. No caption-only feed post — a media URL is always required. |
-| **youtube** | `target.title` (required), `target.privacyStatus` (`"private"` \| `"public"` \| `"unlisted"`) (required), `target.shouldNotifySubscribers` (boolean, required) | `content.text` = video description. A video file URL is required in `content.mediaUrls`. |
+| **youtube** | **(BLOCKED — Brent's YouTube account cannot post; do not use as a post target. Schema kept for reference only.)** `target.title` (required), `target.privacyStatus` (`"private"` \| `"public"` \| `"unlisted"`) (required), `target.shouldNotifySubscribers` (boolean, required) | `content.text` = video description. A video file URL is required in `content.mediaUrls`. YouTube remains valid as a `sourceType` in `POST /source-resolutions-v3` for repurposing YouTube URLs as content cores. |
 
 ---
 
