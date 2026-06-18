@@ -1,9 +1,16 @@
 {
   "startDate": "2026-06-17",
   "usedIdeas": [
+    "ai-expert-panel",
     "clone-the-leader-x",
+    "context-is-leadership",
+    "dont-hand-firehose",
+    "doors-for-overlooked",
+    "followup-machine",
+    "keep-their-voice",
+    "lead-the-moving-x",
     "right-five-things-x",
-    "lead-the-moving-x"
+    "shared-library"
   ],
   "scheduled": [
     {
@@ -23,6 +30,132 @@
       "platform": "twitter",
       "scheduledTime": "2026-06-18T15:00:00Z",
       "ideaRef": "lead-the-moving-x"
+    },
+    {
+      "postSubmissionId": "41da318d-58e8-4548-bb7a-bc0396b916d7",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-19T16:00:00Z",
+      "ideaRef": "followup-machine"
+    },
+    {
+      "postSubmissionId": "8d584a07-46b5-471b-a8a3-1e6c5f5ec479",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-20T16:00:00Z",
+      "ideaRef": "shared-library"
+    },
+    {
+      "postSubmissionId": "e38c4fb1-4255-4e1f-aafd-23ad509ab2e2",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-21T16:00:00Z",
+      "ideaRef": "dont-hand-firehose"
+    },
+    {
+      "postSubmissionId": "8e8327a8-3d73-4066-a86a-c31236af6466",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-22T16:00:00Z",
+      "ideaRef": "context-is-leadership"
+    },
+    {
+      "postSubmissionId": "4b23bbb0-48ed-4f7f-83bf-236d701fdd2d",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-23T16:00:00Z",
+      "ideaRef": "ai-expert-panel"
+    },
+    {
+      "postSubmissionId": "9e2c707e-196e-47b3-9473-1eb69e3e4088",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-24T16:00:00Z",
+      "ideaRef": "keep-their-voice"
+    },
+    {
+      "postSubmissionId": "cd00184b-7a14-4fd9-b7eb-996ccb8a97ba",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-25T16:00:00Z",
+      "ideaRef": "doors-for-overlooked"
+    },
+    {
+      "postSubmissionId": "7b7ee858-0234-48f3-a3b3-411447006e42",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-19T19:00:00Z",
+      "ideaRef": "followup-machine"
+    },
+    {
+      "postSubmissionId": "e13434d6-b01a-46a0-a29d-44a21d4135ce",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-20T19:00:00Z",
+      "ideaRef": "shared-library"
+    },
+    {
+      "postSubmissionId": "508b6958-184d-4e51-baf4-06c6a0b112d6",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-21T19:00:00Z",
+      "ideaRef": "dont-hand-firehose"
+    },
+    {
+      "postSubmissionId": "e20ec10d-00cd-4184-a2e5-de6f7be20813",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-22T19:00:00Z",
+      "ideaRef": "context-is-leadership"
+    },
+    {
+      "postSubmissionId": "67ed2e64-396d-45a5-9fbd-e3063a6a70c9",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-23T19:00:00Z",
+      "ideaRef": "ai-expert-panel"
+    },
+    {
+      "postSubmissionId": "03cf0515-e691-499e-aabf-ec69d4f73990",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-24T19:00:00Z",
+      "ideaRef": "keep-their-voice"
+    },
+    {
+      "postSubmissionId": "3c6b7b52-1168-465e-ae74-54563a5e7581",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-25T19:00:00Z",
+      "ideaRef": "doors-for-overlooked"
+    },
+    {
+      "postSubmissionId": "dc4108c8-0aa5-4f63-85a1-378020d01854",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-19T17:30:00Z",
+      "ideaRef": "followup-machine"
+    },
+    {
+      "postSubmissionId": "b78adbbc-c429-4a9b-b9ba-d1250cfc49a7",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-20T17:30:00Z",
+      "ideaRef": "shared-library"
+    },
+    {
+      "postSubmissionId": "ac850cfe-7391-4ff9-b4b6-72068a13929b",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-21T17:30:00Z",
+      "ideaRef": "dont-hand-firehose"
+    },
+    {
+      "postSubmissionId": "139bf141-a3ba-47e1-a6fb-111b9e39b26f",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-22T17:30:00Z",
+      "ideaRef": "context-is-leadership"
+    },
+    {
+      "postSubmissionId": "e64f62a7-ebf4-4a94-bed4-98104d217b4a",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-23T17:30:00Z",
+      "ideaRef": "ai-expert-panel"
+    },
+    {
+      "postSubmissionId": "637c32ea-28fe-4862-a6d2-c2fe538f4363",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-24T17:30:00Z",
+      "ideaRef": "keep-their-voice"
+    },
+    {
+      "postSubmissionId": "069317ae-f825-4192-ba5f-b04be4921099",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-25T17:30:00Z",
+      "ideaRef": "doors-for-overlooked"
     }
   ]
 }

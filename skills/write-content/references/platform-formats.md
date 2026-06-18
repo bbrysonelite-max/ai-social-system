@@ -50,7 +50,7 @@
 **Priority:** High — second-biggest following.  
 **Ideal length:** 3–6 line caption (compact but punchy).  
 **Structure:** Strong first line (pre-"...more") → body → soft CTA or magnet pointer.  
-**Hashtags:** 5–8 niche hashtags (Instagram favors hashtag discovery; use specific tags tied to network marketing, leadership, AI, duplication, follow-up).  
+**Hashtags:** **Exactly 5, no more** (the Blotato/Instagram API hard-caps at 5 hashtags per post — more than 5 is rejected). Use specific niche tags tied to network marketing, leadership, AI, duplication, follow-up.  
 **Visual expectation:** Image or carousel required. High visual polish expected (Nano Banana templates via Blotato).  
 **CTA style:** Usually the lead-magnet URL (can be direct link or soft pointer in caption).
 
