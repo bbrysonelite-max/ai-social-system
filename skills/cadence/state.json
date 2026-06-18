@@ -1,6 +1,7 @@
 {
   "startDate": "2026-06-17",
   "usedIdeas": [
+    "a-workflow-your-team-can-run-day0",
     "ai-expert-panel",
     "clone-the-leader-x",
     "context-is-leadership",
@@ -156,6 +157,27 @@
       "platform": "instagram",
       "scheduledTime": "2026-06-25T17:30:00Z",
       "ideaRef": "doors-for-overlooked"
+    },
+    {
+      "postSubmissionId": "74a81a78-c229-4192-a952-e418e371e010",
+      "platform": "facebook",
+      "scheduledTime": "2026-06-18T19:20:00Z",
+      "ideaRef": "a-workflow-your-team-can-run-day0",
+      "publicUrl": "https://facebook.com/53954221244_1643158971143114"
+    },
+    {
+      "postSubmissionId": "fc08cc7d-c4c4-44ca-be33-da80194d7e5a",
+      "platform": "instagram",
+      "scheduledTime": "2026-06-18T19:21:00Z",
+      "ideaRef": "a-workflow-your-team-can-run-day0",
+      "publicUrl": "https://www.instagram.com/p/DZvSLDamiSr/"
+    },
+    {
+      "postSubmissionId": "5c6a259a-f806-4e7c-81cf-fc74d664a0ee",
+      "platform": "twitter",
+      "scheduledTime": "2026-06-18T19:20:30Z",
+      "ideaRef": "a-workflow-your-team-can-run-day0",
+      "publicUrl": "https://x.com/pebobryson801/status/2067689298342600951"
     }
   ]
 }
