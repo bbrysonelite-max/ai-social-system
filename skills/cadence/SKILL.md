@@ -5,9 +5,9 @@ description: >-
   batch", "run cadence", "build this week's posts", "schedule the week", or
   "do my content for the week". Drafts and schedules a full week of posts at the
   current ramp volume (1→4/day/channel, auto-advancing by calendar week) across
-  Facebook, Instagram, and X (+ YouTube best-effort) behind a mandatory human
-  approval gate. NEVER posts or schedules without Brent's explicit approval.
-  NEVER repeats an idea already in the usedIdeas ledger.
+  Facebook, Instagram, and X (YouTube is blocked — excluded) behind a mandatory
+  human approval gate. NEVER posts or schedules without Brent's explicit
+  approval. NEVER repeats an idea already in the usedIdeas ledger.
 ---
 
 # cadence (Skill 3)
@@ -25,12 +25,14 @@ in `blotato-post`. This skill orchestrates both — it never rewrites copy.**
 ## What it does
 
 `cadence` is the durable weekly-batch layer that sits above `write-content` and
-Blotato. Each week it reads the current ramp volume from `state.json`, selects
-enough fresh ideas (no repeats, no ideas already in `usedIdeas`) to cover the
-week's total, runs each idea through `write-content` for voice-true drafts,
-generates required visuals for Instagram, assembles every post with the correct
-Blotato fields, presents the full batch for a single approval, and — only after
-explicit approval — schedules every post via `POST /posts`, confirms each via
+Blotato. Each run first verifies that the prior week's scheduled posts actually
+published (the "Do, Then Share" proof loop) before drafting anything new. Then
+it reads the current ramp volume from `state.json`, selects enough fresh ideas
+(no repeats, no ideas already in `usedIdeas`) to cover the week's total, runs
+each idea through `write-content` for voice-true drafts, generates required
+visuals for Instagram, assembles every post with the correct Blotato fields,
+presents the full batch for a single approval, and — only after explicit
+approval — schedules every post via `POST /posts`, confirms each via
 `GET /schedules`, and updates `state.json`. The ramp and no-repeat ledger
 advance automatically; the only recurring human action is the ~10-minute
 weekly review-and-approve.
@@ -81,13 +83,14 @@ Before any computation, read all four source files:
 Read the Blotato API key from `~/.claude.json` at path
 `.mcpServers.blotato.headers["blotato-api-key"]`. Never echo or print it.
 
-### Execute the 8-step procedure
+### Execute the 9-step procedure (Step 0 first)
 
-`references/weekly-run.md` is the authoritative procedure. Execute its 8 steps
-in order:
+`references/weekly-run.md` is the authoritative procedure. Execute its steps
+in order, beginning with Step 0:
 
 | Step | Name | What happens |
 |---|---|---|
+| 0 | Verify last week published | GET /posts/{id} for past FB/IG/X scheduled entries; report published/failed/pending to Brent before drafting. |
 | 1 | Compute this week's volume | Read `startDate` from `state.json`; apply `week = floor((today - startDate) / 7) + 1`; `perDayPerChannel = min(week, 4)`. If `startDate` is missing, stop and ask Brent. |
 | 2 | Re-verify accounts | `GET /users/me/accounts`; map platform → live `accountId`. Fetch `pageId` from FB subaccounts; mark FB SKIP if no Page found. |
 | 3 | Pull fresh material | Apply "Do, Then Share" source priority; enforce no-repeat guard against `usedIdeas`; if idea bank exhausted stop and ask Brent. |
@@ -123,9 +126,8 @@ failed posts in the approval prompt.
 - Facebook with no connected Page → skip FB for this run; show the message:
   "Facebook has no Page connected in Blotato — connect a Page (dashboard:
   'Facebook pages: Don't see your pages? Help') to enable FB posting."
-- Any platform missing a required field (IG without `mediaUrl`, YT without
-  `title`) → skip that post; show a specific message. Do not block the rest
-  of the batch.
+- Any platform missing a required field (IG without `mediaUrl`) → skip that
+  post; show a specific message. Do not block the rest of the batch.
 
 **Wait for Brent's explicit approval.** "Yes," "approved," "go," or an
 equivalent affirmative. Silence or "looks good" without a clear approval word
@@ -151,7 +153,7 @@ inferred from `POST /posts` responses alone:
 | Facebook | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
 | Instagram | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
 | X | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
-| YouTube | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled / SKIPPED (no footage) |
+| YouTube | — | — | — | — | EXCLUDED — YouTube account blocked |
 
 Follow with a SKIPPED section listing every post that was not scheduled, the
 platform, and the specific reason (no Page, missing required field, media
@@ -185,8 +187,10 @@ else is automatic:
 
 - **No hands-off / auto-post mode** — Option B (fully autonomous scheduling
   without a weekly approval) is not built yet. The gate is mandatory.
-- **No YouTube 4-fresh-videos/day** — YouTube is best-effort repurposed footage
-  only. This skill does not generate 4 original videos per day for YouTube.
+- **YouTube is EXCLUDED** — Brent's YouTube account is blocked for posting; the
+  skill does not post to YouTube. YouTube remains valid as a `create_source`
+  input for repurposing (YouTube URLs/scripts as content cores) but is not a
+  publishing target.
 - **No voice authorship** — `cadence` does not draft copy or select cadences.
   That is `write-content`'s domain. `cadence` passes ideas to `write-content`
   and accepts its output character-for-character.

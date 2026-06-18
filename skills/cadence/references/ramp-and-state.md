@@ -15,16 +15,14 @@ This table is locked. Do not adjust volumes, phases, or channel scope without an
 
 | Week | Posts/day/channel | Channels | Total/week |
 |---|---|---|---|
-| 1 | 1 | FB, IG, X (+ YT best-effort) | 28 |
-| 2 | 2 | " | 56 |
-| 3 | 3 | " | 84 |
-| 4+ | 4 | " | 112 (= 16/day target) |
+| 1 | 1 | FB, IG, X (YouTube excluded) | 21 |
+| 2 | 2 | " | 42 |
+| 3 | 3 | " | 63 |
+| 4+ | 4 | " | 84 (= 12/day across 3 channels) |
 
-> **Note on Total/week:** The Total column shows Brent's nominal 4-channel target. The system drafts the full volume for **FB, IG, and X (3 full channels)** and adds YouTube best-effort. It does not manufacture 4 fresh videos/day for YouTube.
+> **Note on Total/week:** The system drafts the full volume for **FB, IG, and X (3 channels)**. YouTube is EXCLUDED — Brent's YouTube account is blocked for posting.
 
 **7 days/week.** Volume is per channel per day. The ramp advances automatically by calendar week from `startDate` — no manual override is needed.
-
-**YouTube is best-effort.** The 4/day figure applies fully to Facebook, Instagram, and X. YouTube fills from repurposed webinar/long-form clips and Brent's own uploads — it does NOT generate 4 fresh videos/day from scratch. If no footage is available for a YT slot, skip that slot cleanly with a note; do not block the batch.
 
 ---
 
@@ -50,7 +48,7 @@ week             = floor(21 / 7) + 1  =  floor(3) + 1  =  4
 perDayPerChannel = min(4, 4)          =  4
 ```
 
-A 7-day batch starting 2026-07-08 would draft **4 × 3 full channels × 7 = 84 posts (FB/IG/X)**, plus best-effort YouTube (footage-dependent). The nominal 4-channel target of 112 includes YouTube; real drafting volume is 84 for the 3 full channels.
+A 7-day batch starting 2026-07-08 would draft **4 × 3 channels × 7 = 84 posts (FB/IG/X)**. YouTube is EXCLUDED (account blocked).
 
 Second example — today is `"2026-06-24"` (7 days elapsed):
 

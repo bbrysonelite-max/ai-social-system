@@ -9,6 +9,54 @@
 
 ---
 
+## Step 0 — Verify last week's posts published
+
+Before drafting anything, confirm that the prior week's scheduled posts actually went out. This is the "Do, Then Share" proof loop.
+
+### What to check
+
+Read `state.json.scheduled`. For each entry where:
+- `scheduledTime` is now in the **past** (before the current UTC time), AND
+- `platform` is `facebook`, `instagram`, or `twitter`
+
+Call:
+
+```
+GET /posts/{postSubmissionId}
+```
+
+(See `slots-and-rest.md` — Publishing & scheduling § Poll post status.)
+
+### Classify each result
+
+| Response | Classification | Action |
+|---|---|---|
+| Has `publicUrl` | **published** | Record the `publicUrl` |
+| Has `errorMessage` | **failed** | Flag it — note the `errorMessage` and `platform` |
+| Neither (status `in-progress`) | **in-progress** | Note it — may still be publishing |
+
+**YouTube is excluded from this check** — YouTube is blocked as a posting target and will not appear in `scheduled` entries going forward.
+
+### Present a verification summary
+
+Before proceeding to Step 1, show Brent a short summary:
+
+```
+── Last-week verification ──────────────────────────────
+Published:  <N>
+Failed:     <N>  ← list each: [platform] errorMessage
+In-progress: <N> ← may still be publishing
+────────────────────────────────────────────────────────
+```
+
+### This step is read-only and non-blocking
+
+Step 0 does **not** block drafting. If failures are found, surface them clearly so Brent can decide what to do (re-post manually, investigate, ignore), then proceed to Step 1. Do not attempt to re-post or retry failed posts automatically.
+
+If `state.json.scheduled` is empty or has no past entries, note "No prior scheduled posts to verify" and proceed.
+
+---
+
 ## Step 1 — Compute this week's volume
 
 Read `state.json` (`skills/cadence/state.json`) and extract `startDate`.
@@ -20,7 +68,7 @@ week             = floor((today - startDate) / 7) + 1
 perDayPerChannel = min(week, 4)
 ```
 
-The active channels for each day are **Facebook, Instagram, and X**. YouTube is best-effort (see Step 8).
+The active channels for each day are **Facebook, Instagram, and X**. YouTube is EXCLUDED (account blocked — not a posting target).
 
 Total posts to draft this week:
 
@@ -28,9 +76,7 @@ Total posts to draft this week:
 total = perDayPerChannel × 3 channels × 7 days
 ```
 
-(YouTube excluded — best-effort, see Step 8)
-
-Example — Week 2: `2 × 3 × 7 = 42` posts (plus any YT slots if footage is available).
+Example — Week 2: `2 × 3 × 7 = 42` posts.
 
 Confirm the figure before proceeding. If `startDate` is missing from `state.json`, stop and ask Brent to confirm the ramp start date — do not assume.
 
@@ -186,7 +232,7 @@ Any criterion at FAIL: skip that post with a clear reason. Do not include it in 
 ### Skip handling
 
 - **Facebook with no Page:** skip cleanly with the message from Step 2.
-- **Any platform missing required fields** (IG missing `mediaUrl`, YT missing `title`): skip with a specific message. Do not block the rest of the batch.
+- **Any platform missing required fields** (IG missing `mediaUrl`): skip with a specific message. Do not block the rest of the batch.
 - List all skipped posts in a SKIPPED section below the gate.
 
 ### The approval gate
@@ -231,9 +277,9 @@ After all `POST /posts` calls succeed:
 3. Do not touch `startDate` — it is set once at initialization and never changed.
 4. `usedIdeas` and `scheduled` are append-only ledgers. Never remove entries.
 
-### YouTube — best-effort only
+### YouTube — EXCLUDED (account blocked)
 
-YouTube is not part of the 3-channel daily volume (FB/IG/X). Post to YouTube only when repurposed footage or a video Brent has already produced is available. Do not generate 4 fresh videos/day from scratch. If no footage is available for a YT slot, skip it cleanly with a note and do not block the batch or the state update.
+YouTube is excluded from posting. Brent's YouTube account is blocked; do not include YouTube as a post target in any batch. YouTube remains valid as a `create_source` input for repurposing (YouTube URLs/scripts as content cores) but must never appear as a publishing target.
 
 ### Completion summary
 
@@ -244,4 +290,4 @@ Present a summary table of what was scheduled and what was skipped, populated fr
 | Facebook | … | … | … | Scheduled / SKIPPED |
 | Instagram | … | … | … | Scheduled / SKIPPED |
 | X | … | … | … | Scheduled / SKIPPED |
-| YouTube | … | … | … | Scheduled / SKIPPED (no footage) |
+| YouTube | — | — | — | EXCLUDED (account blocked) |
