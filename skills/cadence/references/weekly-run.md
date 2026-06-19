@@ -35,7 +35,7 @@ GET /posts/{postSubmissionId}
 | Has `errorMessage` | **failed** | Flag it — note the `errorMessage` and `platform` |
 | Neither (status `in-progress`) | **in-progress** | Note it — may still be publishing |
 
-**YouTube is excluded from this check** — YouTube is blocked as a posting target and will not appear in `scheduled` entries going forward.
+**YouTube is not part of the automated weekly batch yet** — it posts fine (verified 2026-06-19) but needs a video per post, so it won't appear in `scheduled` text+image entries until a video source is wired in.
 
 ### Present a verification summary
 
@@ -68,7 +68,7 @@ week             = floor((today - startDate) / 7) + 1
 perDayPerChannel = min(week, 4)
 ```
 
-The active channels for each day are **Facebook, Instagram, and X**. YouTube is EXCLUDED (account blocked — not a posting target).
+The active channels for each day are **Facebook, Instagram, and X**. YouTube posts fine (verified 2026-06-19) but isn't in the automated text+image batch yet — it needs a video per post.
 
 Total posts to draft this week:
 
@@ -277,9 +277,9 @@ After all `POST /posts` calls succeed:
 3. Do not touch `startDate` — it is set once at initialization and never changed.
 4. `usedIdeas` and `scheduled` are append-only ledgers. Never remove entries.
 
-### YouTube — EXCLUDED (account blocked)
+### YouTube — works, not yet auto-ramped
 
-YouTube is excluded from posting. Brent's YouTube account is blocked; do not include YouTube as a post target in any batch. YouTube remains valid as a `create_source` input for repurposing (YouTube URLs/scripts as content cores) but must never appear as a publishing target.
+YouTube posting is **verified working** (live 2026-06-19, account `27755`, via Blotato REST — see `slots-and-rest.md` youtube row for the exact contract). It is not auto-included in the weekly text+image batch because each YouTube post requires a **video** file in `content.mediaUrls`. To post a video: `POST /v2/media` with `{"url":"<public video url>"}` → use the returned Blotato-hosted `url`. Wiring YouTube into the daily ramp is pending a per-day video source — NOT any account block. YouTube also remains valid as a `create_source` input for repurposing.
 
 ### Completion summary
 
@@ -290,4 +290,4 @@ Present a summary table of what was scheduled and what was skipped, populated fr
 | Facebook | … | … | … | Scheduled / SKIPPED |
 | Instagram | … | … | … | Scheduled / SKIPPED |
 | X | … | … | … | Scheduled / SKIPPED |
-| YouTube | — | — | — | EXCLUDED (account blocked) |
+| YouTube | — | — | — | Not in auto-ramp (posts fine — needs a video per post) |
