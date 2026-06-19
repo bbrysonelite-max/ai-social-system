@@ -286,7 +286,21 @@ skills/cadence/scripts/youtube-autoload.sh \
   --video <PUBLIC_URL> --title "…" --desc-file <path> [--schedule <ISO-UTC>]
 ```
 
-It runs `POST /v2/media` (host the video) → `POST /posts` (youtube target, `privacyStatus: private` by default) → polls and returns the YouTube URL. The video stays **PRIVATE** until Brent reviews it in his morning queue and flips it Public (or it auto-publishes if `--schedule` was used). **Never publish a YouTube video straight to Public — private-first, always.** Video copy convention: front edification hook + tasteful subscribe/like (front AND back) + email CTA → `stan.store/brentbryson`. YouTube also remains valid as a `create_source` input for repurposing. Remaining build: automatic daily-video generation (HeyGen) to feed the autoload.
+It runs `POST /v2/media` (host the video) → `POST /posts` (youtube target, `privacyStatus: private` by default) → polls and returns the YouTube URL. The video stays **PRIVATE** until Brent reviews it in his morning queue and flips it Public (or it auto-publishes if `--schedule` was used). **Never publish a YouTube video straight to Public — private-first, always.** Video copy convention: front edification hook + tasteful subscribe/like (front AND back) + email CTA → `stan.store/brentbryson`. YouTube also remains valid as a `create_source` input for repurposing.
+
+#### HeyGen Shorts generation (approved clones — DO NOT substitute)
+
+Daily Shorts are generated from Brent's **approved** HeyGen clones — never any other. Brent rejected the "grey hoodie" look (`caad55d8…`, bad mouth/teeth). Approved:
+
+| Clone | HeyGen look/avatar ID | Notes |
+|---|---|---|
+| **Black-hoodie "3 Tools" (PRIMARY for Shorts)** | `796f78c2a5514e72962f3a35281aa588` | "Studio Soundwave", motion-enabled, visually confirmed 2026-06-19 |
+| Blue-shirt "Seedance 2.0" | *(TBD — among unnamed "Photo Avatar" looks; confirm by preview before use)* | second approved clone |
+| Third (Brent added 2026-06-19) | *(TBD — confirm by preview)* | third approved clone |
+
+- **Voice:** `50e70458c88d4afb8ec65ec4adee00bb` (Brent's approved render voice, from heygen_full_render.py). Approved — do not change.
+- **Key:** HeyGen API key in `~/Desktop/GitSync/kloop.env` (`HEYGEN_API_KEY=`). `sk_V2_hgu_` keys are TRIAL-tier and expire — see [[project-blotato-social-posting]].
+- Generate via HeyGen CLI (`heygen video create`) or `api.heygen.com/v2/video/generate` (avatar_id = approved look, voice_id above, vertical 720×1280, `test:true` for free watermarked checks) → poll → feed the resulting public URL to `youtube-autoload.sh`. Remaining build: wire this generation step into the daily run.
 
 ### Completion summary
 
