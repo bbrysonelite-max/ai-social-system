@@ -5,7 +5,8 @@ description: >-
   batch", "run cadence", "build this week's posts", "schedule the week", or
   "do my content for the week". Drafts and schedules a full week of posts at the
   current ramp volume (1→4/day/channel, auto-advancing by calendar week) across
-  Facebook, Instagram, and X (YouTube posts fine but isn't in the auto-ramp yet — it needs a video per post) behind a mandatory
+  Facebook, Instagram, and X (text+image), plus YouTube as a daily video channel
+  (auto-uploaded PRIVATE-first via scripts/youtube-autoload.sh, for Brent's review), behind a mandatory
   human approval gate. NEVER posts or schedules without Brent's explicit
   approval. NEVER repeats an idea already in the usedIdeas ledger.
 ---
@@ -153,7 +154,7 @@ inferred from `POST /posts` responses alone:
 | Facebook | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
 | Instagram | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
 | X | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
-| YouTube | — | — | — | — | Not in auto-ramp (posts fine — needs a video per post) |
+| YouTube | {live accountId} | {publish/schedule time} | {UUID} | {slug} | PRIVATE — staged for review (or Scheduled) |
 
 Follow with a SKIPPED section listing every post that was not scheduled, the
 platform, and the specific reason (no Page, missing required field, media
@@ -183,16 +184,34 @@ else is automatic:
 
 ---
 
+## YouTube — daily video channel (in scope)
+
+YouTube is a **daily** posting channel (channel `@BrentBrysonaios`, Blotato
+account `27755`). One video per day. It runs alongside the FB/IG/X text+image
+ramp; YouTube itself is a steady 1 video/day (not the 1→4 ramp).
+
+- **Each YouTube post needs a video** in `content.mediaUrls`. Blotato has **no**
+  raw local-file upload — the video must be at a **public URL** (daily HeyGen
+  renders already are; for a local-only file, host it first). `POST /v2/media`
+  with `{"url": "<public video url>"}` returns a Blotato-hosted URL.
+- **Upload is automatic and PRIVATE-first.** Use
+  `scripts/youtube-autoload.sh --video <publicURL> --title "…" --desc-file <path>`
+  (defaults to `privacyStatus: private`; add `--schedule <ISO-UTC>` to stage as
+  Scheduled). Brent reviews the private video in his morning queue, then flips it
+  Public — or it auto-publishes if scheduled. **He never uploads manually.**
+- **Video copy convention:** front edification hook ("watch to the end and you'll
+  learn…"), a tasteful subscribe + like ask (front AND back, never over-ask), and
+  the email CTA → `stan.store/brentbryson` (free guide) in the description.
+- **Remaining build:** automatic daily-video *generation* (HeyGen avatar Short in
+  Brent's pro-voice clone) to feed the autoload. Until that's wired, supply the
+  video URL per day.
+
+---
+
 ## Out of scope
 
 - **No hands-off / auto-post mode** — Option B (fully autonomous scheduling
   without a weekly approval) is not built yet. The gate is mandatory.
-- **YouTube not yet in the auto-ramp** — YouTube posting is **verified working**
-  (live 2026-06-19, account `27755`, via Blotato REST). It is not auto-included
-  in the weekly text+image batch because each YouTube post requires a **video**
-  file; wiring it in is pending a per-day video source (HeyGen batch / repurposed
-  footage), NOT any account block. YouTube also remains valid as a `create_source`
-  input for repurposing (YouTube URLs/scripts as content cores).
 - **No voice authorship** — `cadence` does not draft copy or select cadences.
   That is `write-content`'s domain. `cadence` passes ideas to `write-content`
   and accepts its output character-for-character.

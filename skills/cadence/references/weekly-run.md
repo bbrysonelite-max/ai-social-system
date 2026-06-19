@@ -35,7 +35,7 @@ GET /posts/{postSubmissionId}
 | Has `errorMessage` | **failed** | Flag it — note the `errorMessage` and `platform` |
 | Neither (status `in-progress`) | **in-progress** | Note it — may still be publishing |
 
-**YouTube is not part of the automated weekly batch yet** — it posts fine (verified 2026-06-19) but needs a video per post, so it won't appear in `scheduled` text+image entries until a video source is wired in.
+**YouTube is a daily video channel** (1/day) — verify its prior posts too (`GET /posts/{id}`). YouTube videos are staged PRIVATE-first for Brent's review, so a "scheduled"/"private" status pending his approval is expected, not a failure.
 
 ### Present a verification summary
 
@@ -68,7 +68,7 @@ week             = floor((today - startDate) / 7) + 1
 perDayPerChannel = min(week, 4)
 ```
 
-The active channels for each day are **Facebook, Instagram, and X**. YouTube posts fine (verified 2026-06-19) but isn't in the automated text+image batch yet — it needs a video per post.
+The active channels for each day are **Facebook, Instagram, and X** (text+image, 1→4 ramp) **plus YouTube** (1 video/day, staged private-first — see the YouTube section below).
 
 Total posts to draft this week:
 
@@ -277,9 +277,16 @@ After all `POST /posts` calls succeed:
 3. Do not touch `startDate` — it is set once at initialization and never changed.
 4. `usedIdeas` and `scheduled` are append-only ledgers. Never remove entries.
 
-### YouTube — works, not yet auto-ramped
+### YouTube — daily video channel (1/day, PRIVATE-first)
 
-YouTube posting is **verified working** (live 2026-06-19, account `27755`, via Blotato REST — see `slots-and-rest.md` youtube row for the exact contract). It is not auto-included in the weekly text+image batch because each YouTube post requires a **video** file in `content.mediaUrls`. To post a video: `POST /v2/media` with `{"url":"<public video url>"}` → use the returned Blotato-hosted `url`. Wiring YouTube into the daily ramp is pending a per-day video source — NOT any account block. YouTube also remains valid as a `create_source` input for repurposing.
+YouTube is a **daily** channel: 1 video/day, account `27755`, channel `@BrentBrysonaios` (verified live 2026-06-19). Each post needs a **video** at a public URL — Blotato has no raw local-file upload. Don't hand-build the call; use the autoload script:
+
+```
+skills/cadence/scripts/youtube-autoload.sh \
+  --video <PUBLIC_URL> --title "…" --desc-file <path> [--schedule <ISO-UTC>]
+```
+
+It runs `POST /v2/media` (host the video) → `POST /posts` (youtube target, `privacyStatus: private` by default) → polls and returns the YouTube URL. The video stays **PRIVATE** until Brent reviews it in his morning queue and flips it Public (or it auto-publishes if `--schedule` was used). **Never publish a YouTube video straight to Public — private-first, always.** Video copy convention: front edification hook + tasteful subscribe/like (front AND back) + email CTA → `stan.store/brentbryson`. YouTube also remains valid as a `create_source` input for repurposing. Remaining build: automatic daily-video generation (HeyGen) to feed the autoload.
 
 ### Completion summary
 
@@ -290,4 +297,4 @@ Present a summary table of what was scheduled and what was skipped, populated fr
 | Facebook | … | … | … | Scheduled / SKIPPED |
 | Instagram | … | … | … | Scheduled / SKIPPED |
 | X | … | … | … | Scheduled / SKIPPED |
-| YouTube | — | — | — | Not in auto-ramp (posts fine — needs a video per post) |
+| YouTube | 27755 | … | … | PRIVATE — staged for review (or Scheduled) |
