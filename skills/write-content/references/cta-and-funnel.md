@@ -8,19 +8,14 @@
 ## Primary CTA (always)
 
 **Goal:** High-value lead magnet → email capture.  
-**Magnet:** "The Factory Blueprint — Your AI Agent Starter Kit for Network Marketers"  
-**Newsletter:** "Agentic Loadout" (free weekly)  
-**Opt-in URL:** `stan.store/brentbryson/p/factory-blueprint`
+**Magnet:** the free guide *"Getting Started in AI for Network Marketers"* (the "Get My FREE Guide Now!" opt-in on Stan).  
+**Opt-in URL (LIVE — canonical):** `stan.store/brentbryson`
 
-Every cold social post should point to the lead magnet, never directly to product purchase or signup. The goal right now is **email list growth from zero** — every email is 100% growth.
+> ⚠️ The dedicated `stan.store/brentbryson/p/factory-blueprint` page is **NOT live** (confirmed 2026-06-19). Do **not** use it. The live email-capture opt-in is the free-guide form at **`stan.store/brentbryson`** — that is the only link to use on cold posts. (The "Factory Blueprint" name may still be used conceptually in copy, but the *link* is always the store root.)
 
-**Content strategy:** REUSE the existing, working funnel in `bbrysonelite-max/Youtube-system/lead-magnet/` — do not rebuild:
-- Magnet asset exists: `factory-blueprint.html`
-- Welcome sequence exists: 3 emails / 7 days, FK Grade 8, in-voice
-- Email capture exists: Stan Store (link above) + Beehiiv option
+Every cold social post should point to the free-guide opt-in, never directly to product purchase or signup. The goal right now is **email list growth from zero** — every email is 100% growth.
 
-> NOTE (non-normative — open question, not a rule):
-> Verify whether `factory-blueprint.html` is already team-framed ("how AI helps YOUR TEAM") or if opt-in copy needs re-pointing from individual-framed ("run YOUR business").
+**Email capture (live):** Stan Store free-guide opt-in at `stan.store/brentbryson` (Beehiiv is a future option). The Stan store also sells 3 eBooks + Probe Academy — secondary CTAs, never the cold-post link.
 
 ---
 
@@ -64,7 +59,7 @@ This buys algorithmic safety while the account is building trust. Once the accou
    NOT in cold social CTAs. Different audiences (team member / leader / prospect) get segmented messaging downstream.
 
 3. **Magnet URL is the only link in cold posts.**  
-   If you're linking on cold social, it's always `stan.store/brentbryson/p/factory-blueprint` or the Bio link shortcut ("DM me for the link"). Nothing else.
+   If you're linking on cold social, it's always `stan.store/brentbryson` (the live free-guide opt-in) or the Bio link shortcut ("DM me for the link"). Nothing else. (Never `…/p/factory-blueprint` — that page is not live.)
 
 4. **Every post should serve the email list.**  
    The implicit funnel: post → magnet → email → nurture → conversation → product/partnership. Don't skip the email step.

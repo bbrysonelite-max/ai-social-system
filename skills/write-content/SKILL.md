@@ -26,8 +26,12 @@ does it serve his team?"** If no — rewrite before showing it.
 - **An idea/topic** (a line, a hook, an angle), **OR a local file path** — a note,
   a screenshot, or a metric "receipt" (a number/proof Brent wants to build a post
   around).
-- **Optional target platforms.** Default: **Facebook + Instagram**. Add
-  **YouTube** and/or **X** only when Brent asks for them.
+- **Optional target platforms.** Default: **Facebook + Instagram**. Add **X** when
+  Brent asks. **YouTube is now a daily channel** — when drafting for YouTube, write
+  the video's title + description (and Short script if asked) to the YouTube copy
+  convention: front edification hook ("watch to the end and you'll learn…"),
+  tasteful subscribe + like ask front AND back (never over-ask), and the email CTA
+  → `stan.store/brentbryson` (the live free-guide opt-in).
 - **Optional account state:** `warm | warm-up` (default: `warm-up`). Drives CTA
   mode — warm-up prefers reach-safe mechanics; warm allows direct links.
 
