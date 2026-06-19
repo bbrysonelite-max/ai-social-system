@@ -15,12 +15,12 @@ This table is locked. Do not adjust volumes, phases, or channel scope without an
 
 | Week | Posts/day/channel | Channels | Total/week |
 |---|---|---|---|
-| 1 | 1 | FB, IG, X (YouTube excluded) | 21 |
+| 1 | 1 | FB, IG, X (YouTube posts fine; not auto-ramped — needs video/post) | 21 |
 | 2 | 2 | " | 42 |
 | 3 | 3 | " | 63 |
 | 4+ | 4 | " | 84 (= 12/day across 3 channels) |
 
-> **Note on Total/week:** The system drafts the full volume for **FB, IG, and X (3 channels)**. YouTube is EXCLUDED — Brent's YouTube account is blocked for posting.
+> **Note on Total/week:** The system drafts the full volume for **FB, IG, and X (3 channels)**. YouTube posting **works** (verified live 2026-06-19, account `27755`) but is **not yet in the automated daily ramp** — each YouTube post needs a video file, and the daily batch produces text+image. Wiring YouTube into the ramp is pending a per-day video source (HeyGen batch / repurposed footage), not any account block.
 
 **7 days/week.** Volume is per channel per day. The ramp advances automatically by calendar week from `startDate` — no manual override is needed.
 
@@ -48,7 +48,7 @@ week             = floor(21 / 7) + 1  =  floor(3) + 1  =  4
 perDayPerChannel = min(4, 4)          =  4
 ```
 
-A 7-day batch starting 2026-07-08 would draft **4 × 3 channels × 7 = 84 posts (FB/IG/X)**. YouTube is EXCLUDED (account blocked).
+A 7-day batch starting 2026-07-08 would draft **4 × 3 channels × 7 = 84 posts (FB/IG/X)**. YouTube is not counted here yet — it posts fine but isn't in the automated text+image ramp (it needs a video per post).
 
 Second example — today is `"2026-06-24"` (7 days elapsed):
 
