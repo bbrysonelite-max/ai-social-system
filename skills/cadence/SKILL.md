@@ -184,27 +184,29 @@ else is automatic:
 
 ---
 
-## YouTube — daily video channel (in scope)
+## YouTube — video channel (Brent supplies the clip)
 
-YouTube is a **daily** posting channel (channel `@BrentBrysonaios`, Blotato
-account `27755`). One video per day. It runs alongside the FB/IG/X text+image
-ramp; YouTube itself is a steady 1 video/day (not the 1→4 ramp).
+YouTube is a video channel (`@BrentBrysonaios`, Blotato account `27755`).
 
-- **Each YouTube post needs a video** in `content.mediaUrls`. Blotato has **no**
-  raw local-file upload — the video must be at a **public URL** (daily HeyGen
-  renders already are; for a local-only file, host it first). `POST /v2/media`
-  with `{"url": "<public video url>"}` returns a Blotato-hosted URL.
-- **Upload is automatic and PRIVATE-first.** Use
-  `scripts/youtube-autoload.sh --video <publicURL> --title "…" --desc-file <path>`
-  (defaults to `privacyStatus: private`; add `--schedule <ISO-UTC>` to stage as
-  Scheduled). Brent reviews the private video in his morning queue, then flips it
-  Public — or it auto-publishes if scheduled. **He never uploads manually.**
-- **Video copy convention:** front edification hook ("watch to the end and you'll
-  learn…"), a tasteful subscribe + like ask (front AND back, never over-ask), and
-  the email CTA → `stan.store/brentbryson` (free guide) in the description.
-- **Remaining build:** automatic daily-video *generation* (HeyGen avatar Short in
-  Brent's pro-voice clone) to feed the autoload. Until that's wired, supply the
-  video URL per day.
+🚫 **DO NOT auto-generate clones.** Settled 2026-06-19 after a full day of
+failed attempts: every API/Video-Agent render (incl. HeyGen's own flagship) was
+rejected. **Claude does NOT make the video.** Brent makes his clone himself in
+the HeyGen GUI (Avatar IV / Seedance — the only quality he accepts); the good
+clips live in his Projects **"Brent Clone"** folder. Claude's job is **downstream
+only**.
+
+**The working handoff:**
+1. Brent points to a finished clip (a HeyGen video ID, or says which one).
+2. Fetch its `video_url` (`heygen video get <id>` → `.data.video_url`).
+3. Post it **AS-IS, full-width 16:9** (his preferred direction — NEVER crop to
+   vertical 9:16; he rejects narrow-tall. 9:16 only if the piece is explicitly a
+   Short) via `scripts/youtube-autoload.sh --video <url> --title "…" --desc-file <path>`
+   (defaults PRIVATE; `--schedule <ISO-UTC>` to stage). Add title + the
+   `stan.store/brentbryson` free-guide link in the description.
+4. Brent reviews Private, flips Public when happy (or it auto-publishes if scheduled).
+
+One canonical clone going forward: his **blue-polo Avatar IV** look. See
+[[project-blotato-social-posting]] for the full settled model.
 
 ---
 
