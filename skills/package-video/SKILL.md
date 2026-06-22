@@ -31,6 +31,12 @@ Proven working example: `~/hyperframes-prototype/caption-demo-16x9/` (built 2026
 4. **The clip plays untouched.** Captions/overlays are the only thing added. Never
    recolor, crop, or re-time the footage.
 5. **Secrets: reference by name, never echo a key value.** See `references/credentials.md`.
+6. **Compliance — NO claims in any overlay, thumbnail, or copy.** No tenure ("X years
+   in…"), no rank/title, no income/earnings/success claims, no implied results.
+   The lower-third is **identification only** (name). Thumbnails hook on curiosity,
+   never credentials. **Brent is the authority on the lines and clears any
+   descriptor.** (A prominent "39 Years in Network Marketing" lower-third was the
+   exact mistake that triggered this rule — name only, always.)
 
 ## Quick start (the proven path)
 

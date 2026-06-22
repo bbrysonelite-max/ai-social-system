@@ -92,10 +92,15 @@ doc = f"""<!doctype html>
       </div>
 
       <!-- name lower-third (top-left, track 3) -->
+      <!-- ⚠️ COMPLIANCE — lower-third is IDENTIFICATION ONLY: name, nothing else.
+           NEVER put tenure ("X years"), rank/title, income/earnings, or success
+           claims here, in the CTA card, in the thumbnail, or in any overlay/copy.
+           Brent is the authority on the lines and clears ANY descriptor line.
+           Default = name only. (The .role style below stays unused unless Brent
+           approves a compliance-safe descriptor.) -->
       <div id="lt" class="clip" data-start="0.5" data-duration="4.5" data-track-index="3">
         <div class="lt-inner">
           <div class="name">Brent Bryson</div>
-          <div class="role">39 Years in Network Marketing</div>
         </div>
       </div>
 
