@@ -27,6 +27,16 @@ Pipeline: **idea → voice-true drafts → visuals + scheduling → weekly feedb
 The split is deliberate: Skill 1 has no external dependency and is built/tested first;
 Skill 2 talks to Blotato; Skill 3 orchestrates both into the durable weekly run.
 
+## YouTube channel strategy (`youtube/`)
+
+The YouTube channel's **identity, audience, content pillars, scripts, SEO, and
+analytics playbook** live in **`youtube/`** — merged here 2026-06-22 from the
+former standalone `Youtube-system` repo (now closed) so there is **one source of
+truth**. That folder is strategy; the **mechanism** (rendering, packaging,
+scheduling, posting) is owned by the skills above. Posting runs on **Blotato, not
+Buffer**, and avatar clips are **rendered by Brent in the HeyGen GUI**, not
+auto-generated.
+
 ### Channels
 
 - **Facebook, Instagram, X** — text+image, ramp **1→4 posts/day/channel** over 4 weeks.
@@ -56,5 +66,11 @@ ai-social-system/
 │       ├── references/         # ramp, REST contract, weekly procedure
 │       ├── scripts/            # youtube-autoload.sh (hands-free YouTube upload)
 │       └── state.json          # startDate, usedIdeas ledger, scheduled history
+├── youtube/                    # YouTube channel STRATEGY (merged from Youtube-system)
+│   ├── identity/               # SOUL, CHANNEL_IDENTITY, AVATAR_SPECS, VOICE rules
+│   ├── agents/                 # research / script / metadata agent prompts
+│   ├── scripts/ production/    # example scripts + metadata/thumbnail
+│   ├── analytics/              # weekly analytics log
+│   ├── README.md  WORKFLOW.md  # channel playbook (mechanism → the skills above)
 └── content-db/                 # weekly content-idea database
 ```
