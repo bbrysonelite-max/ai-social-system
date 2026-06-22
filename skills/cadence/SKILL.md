@@ -27,13 +27,15 @@ in `blotato-post`. This skill orchestrates both — it never rewrites copy.**
 
 `cadence` is the durable weekly-batch layer that sits above `write-content` and
 Blotato. Each run first verifies that the prior week's scheduled posts actually
-published (the "Do, Then Share" proof loop) before drafting anything new. Then
-it reads the current ramp volume from `state.json`, selects enough fresh ideas
-(no repeats, no ideas already in `usedIdeas`) to cover the week's total, runs
-each idea through `write-content` for voice-true drafts, generates required
-visuals for Instagram, assembles every post with the correct Blotato fields,
-presents the full batch for a single approval, and — only after explicit
-approval — schedules every post via `POST /posts`, confirms each via
+published (the "Do, Then Share" proof loop), then reads how they performed and
+ranks the winning themes + send windows (the feedback loop), before drafting
+anything new. Then it reads the current ramp volume from `state.json`, selects
+enough fresh ideas (no exact or near-duplicate repeats, biased toward what
+worked, auto-replenished from the vault) to cover the week's total, runs each
+idea through `write-content` for voice-true drafts, generates required visuals
+for Instagram, assembles every post with the correct Blotato fields, presents
+the batch tiered for a single approve-by-exception review, and — only after
+explicit approval — schedules every post via `POST /posts`, confirms each via
 `GET /schedules`, and updates `state.json`. The ramp and no-repeat ledger
 advance automatically; the only recurring human action is the ~10-minute
 weekly review-and-approve.
@@ -91,14 +93,15 @@ in order, beginning with Step 0:
 
 | Step | Name | What happens |
 |---|---|---|
-| 0 | Verify last week published | GET /posts/{id} for past FB/IG/X scheduled entries; report published/failed/pending to Brent before drafting. |
+| 0 | Verify last week published | GET /posts/{id} for past FB/IG/X scheduled entries; report published/failed/pending to Brent before drafting; offer to heal failures into this batch (still gated). |
+| 0.5 | Learn from last week | Read engagement (`GET /posts/{id}/analytics`) for last week's published posts; rank top/bottom themes + best send windows into `state.json.performance`. Read-only, best-effort — degrades to "no signal" if analytics unavailable. Feeds Steps 3 + 6. |
 | 1 | Compute this week's volume | Read `startDate` from `state.json`; apply `week = floor((today - startDate) / 7) + 1`; `perDayPerChannel = min(week, 4)`. If `startDate` is missing, stop and ask Brent. |
 | 2 | Re-verify accounts | `GET /users/me/accounts`; map platform → live `accountId`. Fetch `pageId` from FB subaccounts; mark FB SKIP if no Page found. |
-| 3 | Pull fresh material | Apply "Do, Then Share" source priority; enforce no-repeat guard against `usedIdeas`; if idea bank exhausted stop and ask Brent. |
+| 3 | Pull fresh material | Apply "Do, Then Share" source priority; bias toward Step-0.5 top themes; no-repeat guard (exact + near-duplicate) against `usedIdeas`; auto-replenish from the vault before stopping; only ask Brent if receipts + bank + vault are all exhausted. |
 | 4 | Draft each post | Run `write-content` skill per idea; accept only drafts that pass all 5 criteria; never mutate copy. |
 | 5 | Build visuals | Generate visuals for every IG post (required); optional for FB/X; skip IG post cleanly if generation fails. |
-| 6 | Assign send times (slots optional) | Compute explicit ISO-8601 UTC `scheduledTime` for each post spread across the week (primary path — slots/`useNextFreeSlot` are plan-gated and currently return Unauthorized on Brent's plan). |
-| 7 | Present batch + approval gate | Show full batch; run rubric criteria 2–5; wait for explicit approval (see Approval gate below). |
+| 6 | Assign send times (slots optional) | Compute explicit ISO-8601 UTC `scheduledTime` for each post spread across the week; prefer Step-0.5 `bestWindows`; enforce ≥30-min same-platform same-day stagger (slots/`useNextFreeSlot` are plan-gated, Unauthorized on Brent's plan). |
+| 7 | Present batch + approval gate | Tiered (approve-by-exception): Tier 1 (sensitive/new/YouTube) shown in full; Tier 2 (routine, clean-rubric) as a collapsed scannable table; run rubric criteria 2–5; wait for explicit approval (see Approval gate below). |
 | 8 | Schedule + update state | On approval: `POST /posts`; confirm via `GET /schedules`; append `usedIdeas` + `scheduled` entries to `state.json`. |
 
 See `references/weekly-run.md` for the full per-step detail including
@@ -122,6 +125,20 @@ every post. Criterion 1 (Human-approved) is PENDING until Brent approves:
 
 Any criterion at FAIL: skip that post with a clear reason. Do not include
 failed posts in the approval prompt.
+
+**Present tiered (approve-by-exception) — do NOT dump 84 raw drafts.** At Week-3/4
+volume a flat "read everything" list is a rubber stamp. Split the batch:
+
+- **Tier 1 — review in full:** any post that is compliance-sensitive, a new/untested
+  theme, an unusual CTA/link, scored anything but a clean rubric PASS, or is a
+  YouTube video. Show every field + its own rubric line.
+- **Tier 2 — approve-by-exception:** routine, on-pattern, clean-rubric posts in
+  proven themes. Show a collapsed scannable table (#, platform, time, slug, first
+  ~12 words, visual ✅) + one batch rubric summary line. Brent can say "expand N"
+  to see any row in full, or approve the block.
+
+A rubric FAIL is never hidden inside the Tier-2 block — it always goes to the
+skipped/FAIL list. See `references/weekly-run.md` Step 7 for the full tiering rules.
 
 **Skip rules:**
 - Facebook with no connected Page → skip FB for this run; show the message:
@@ -173,8 +190,13 @@ else is automatic:
 - **Ramp advances automatically** — `week` is computed fresh each run from
   `state.json.startDate`; no manual volume input needed.
 - **No-repeat guard is automatic** — every idea slug is checked against
-  `usedIdeas` before drafting; the ledger is append-only and persists across
-  sessions.
+  `usedIdeas` (exact + near-duplicate) before drafting; the ledger is append-only
+  and persists across sessions. When the Desktop bank runs low the run
+  auto-replenishes from the vault rather than stopping.
+- **Feedback loop is automatic** — Step 0.5 reads last week's engagement and
+  ranks themes + send windows into `state.json.performance`, which biases idea
+  selection (Step 3) and send times (Step 6). Best-effort: degrades cleanly if
+  analytics are unavailable on Brent's plan; never fabricates numbers.
 - **Send times computed explicitly** — Step 6 assigns explicit ISO-8601 UTC `scheduledTime` values spread across the week's days per channel (primary path). Slot self-provisioning is optional — currently plan-gated (`POST /schedule/slots` returns Unauthorized on Brent's plan).
 - **State persists** — `state.json` is updated immediately after every approved
   batch; the next run picks up exactly where this one left off.
@@ -217,5 +239,9 @@ One canonical clone going forward: his **blue-polo Avatar IV** look. See
 - **No voice authorship** — `cadence` does not draft copy or select cadences.
   That is `write-content`'s domain. `cadence` passes ideas to `write-content`
   and accepts its output character-for-character.
-- **No analytics optimization** — post-performance data does not feed back into
-  scheduling or idea selection in this version.
+- **No deep analytics optimization** — Step 0.5 adds a lightweight engagement
+  feedback loop (top/bottom themes + best send windows) that *nudges* idea
+  selection and timing. It is a ranking signal, not a full optimizer: no A/B
+  testing, no automated copy tuning, and rankings never override Brent's gate
+  judgment. Also gated on Blotato exposing analytics on his plan (not yet
+  live-verified).

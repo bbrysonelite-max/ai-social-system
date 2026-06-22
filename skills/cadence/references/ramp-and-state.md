@@ -70,6 +70,36 @@ That matches the Week 2 row in the ramp table (2 posts/day/channel, 56/week tota
 | `startDate` | ISO date string (`"YYYY-MM-DD"`) | The calendar date the ramp started. Used in the week arithmetic above. Never change this after the first batch. |
 | `usedIdeas` | Array of idea slug strings | Every idea slug that has been posted or scheduled. **This is the no-repeat guard** — before drafting a post for any idea, confirm its slug is NOT in this array. |
 | `scheduled` | Array of schedule entry objects | Record of every post submitted to Blotato. Append an entry immediately after `blotato_create_post` returns a `postSubmissionId`. |
+| `performance` | Object (rolling, overwrite-latest) | The engagement signal from Step 0.5. **NOT append-only** — overwrite it each run with the latest read. Feeds idea selection (Step 3) and send times (Step 6). Empty `{}` until the first successful analytics read. |
+
+### `performance` shape (rolling — overwrite each run)
+
+```json
+{
+  "performance": {
+    "lastReadDate": "2026-06-24",
+    "analyticsStatus": "live | unavailable",
+    "topThemes": [
+      { "ideaFamily": "followup", "proxy": 142 },
+      { "ideaFamily": "build-your-own-org", "proxy": 118 }
+    ],
+    "bottomThemes": [
+      { "ideaFamily": "tool-roundup", "proxy": 9 }
+    ],
+    "bestWindows": {
+      "facebook": ["16:00Z"],
+      "instagram": ["22:00Z"],
+      "twitter": ["15:00Z"]
+    },
+    "sampleSize": 21
+  }
+}
+```
+
+- `proxy` = the engagement score (e.g. `likes + 2×comments + shares + clicks`). It is a relative ranking signal, not a reported metric — never present it to Brent as "real engagement numbers."
+- `analyticsStatus: "unavailable"` means the Blotato analytics endpoints 401/404'd on Brent's plan; rankings then carry over from the prior read (or stay empty). Report this honestly in the Step 0.5 summary.
+- With `sampleSize < 5`, treat rankings as provisional ("insufficient signal").
+- Unlike `usedIdeas`/`scheduled`, `performance` IS overwritten each run — it reflects only the most recent window, not history.
 
 ### `scheduled` entry shape
 
@@ -94,5 +124,6 @@ After every batch completes (after Brent approves and all `blotato_create_post` 
 2. **Append to `scheduled`** — add one entry per post submitted, using the `postSubmissionId` returned by Blotato, the platform string, the scheduled time (ISO-8601 UTC), and the idea slug.
 3. **Do not touch `startDate`** — it is set once at initialization and never changed.
 4. **Do not remove entries** — `usedIdeas` and `scheduled` are append-only ledgers. Removing an entry would allow repeat posts.
+5. **`performance` is the exception** — it is rolling, overwrite-latest (written in Step 0.5, before drafting). The append-only rule applies only to `usedIdeas` and `scheduled`.
 
 The `usedIdeas` ledger is authoritative. If an idea slug appears there, it must not be drafted again — even if the original post was cancelled, deleted, or never fired. When the idea bank is exhausted (all slugs appear in `usedIdeas`), report this to Brent before running the batch and ask which ideas may be recycled.
