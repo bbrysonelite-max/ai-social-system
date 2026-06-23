@@ -14,18 +14,26 @@ Adopted from Sabrina Ramonov's (founder of Blotato) "content factory" process:
 ~250 pieces/week, batched in ~1 hour, every piece reviewed for brand voice before
 it goes live. Human stays in the loop on creative direction; AI handles volume.
 
-Pipeline: **idea → voice-true drafts → visuals + scheduling → weekly feedback loop.**
+Pipeline: **see what's owed → pick an idea → research it → voice-true draft → visuals + scheduling → verify it published.**
 
-## The three skills
+## The skills (in run order)
 
-| Order | Skill | Job | Depends on |
+`cadence` wraps the run: it **opens** by checking the schedule (what published, what's
+**owed** this week), and **closes** by scheduling the approved batch. In between, each
+owed slot flows through research → draft → visuals.
+
+| Step | Skill | Job | Depends on |
 |---|---|---|---|
-| 1 | `skills/write-content` | Turn one idea into platform-specific posts **in Brent's voice**. Drafting only — no posting. | Voice sources (local) |
-| 2 | `skills/blotato-post` | Generate visuals + schedule/post drafts across connected channels via Blotato. | Blotato (REST; MCP loads on fresh session) |
-| 3 | `skills/cadence` | Weekly-batch orchestration: ramp volume, no-repeat ledger, approve-first gate, schedule the week across all channels. | Skills 1 + 2 |
+| **open** | `skills/cadence` | Verify last week published; compute what's **owed** this week (ramp volume, gaps, no-repeat ledger). This scopes everything below. | state.json |
+| 1 | `skills/research-content` | Pick an idea from the bank to fill an owed slot; **research it** into a brief (facts, the hook, sources). Research only. | Idea bank, WebSearch, `last30days` |
+| 2 | `skills/write-content` | Turn the brief into platform-specific posts **in Brent's voice**. Drafting only — no posting. | Research brief + voice sources |
+| 3 | `skills/blotato-post` | Generate visuals + schedule/post drafts across channels via Blotato. | Blotato (REST; MCP loads on fresh session) |
+| 3b | `skills/make-thumbnail` | Deterministic 1280×720 YouTube thumbnail (real photo + code-rendered headline). | headless Chrome |
+| **close** | `skills/cadence` | On approval: schedule the batch, confirm each published, update state. | Steps 1–3 |
 
-The split is deliberate: Skill 1 has no external dependency and is built/tested first;
-Skill 2 talks to Blotato; Skill 3 orchestrates both into the durable weekly run.
+You can't write until you know what you're writing about — **research runs before
+`write-content`** — and you don't research blind: **`cadence`'s "what's owed" check
+runs before research**, so you only research what the schedule actually needs.
 
 ### Channels
 
