@@ -60,3 +60,19 @@ master, run this for the YouTube thumbnail, then post via `cadence` /
 `youtube-autoload.sh`. Image *generation* for in-feed posts still uses Blotato's
 Nano Banana templates (in `blotato-post`); **thumbnails use this** — deterministic
 beats generative when the result has to be clean and repeatable.
+
+## Lineage + deferred ideas (preserved from the old spec)
+
+This skill is the **build** of the `youtube-thumbnail` design spec that used to live
+in The Truth (`research/youtube_thumbnail_skill_spec.md`, now deprecated). It is the
+canonical thumbnail skill — one home, no duplicate. The spec's good ideas that this
+v1 deliberately left out, kept here so they're not lost:
+
+- **Style presets** — *Loud* (3D-extruded yellow), *Cinematic* (clean white + accent,
+  what this v1 ships), *Bold* (single-weight minimal). Could become a `--style` flag.
+- **9:16 Shorts (1080×1920)** — deferred. **16:9 only** with the current clones
+  (Brent's rule); add vertical only when a vertical-worthy clone set exists.
+- **Part B — AI scene generation** — generate the *background scene* from a prompt +
+  Brent's face reference (Higgsfield / fal.ai), then finish with this skill's overlay.
+  Deferred: Brent deprioritized AI image-gen in favor of deterministic. Revisit only
+  if a generated background is wanted behind the headline.
