@@ -9,19 +9,23 @@ deadline, or "just post it" overrides it.
 
 ## Approved clones — the ONLY looks allowed
 
-Source of truth: Brent's approved-clone registry
-(`~/Documents/New project/Brent's Favorite Clones/`). **Canonical look = blue-polo
-Avatar IV.**
+**Source of truth: the two clones in Brent's HeyGen "Brent clone 2" folder**
+(confirmed by Brent + verified live 2026-06-22). These two IDs only:
 
-| Look | HeyGen ID(s) | Status |
-|---|---|---|
-| **Blue-polo Avatar IV** (canonical) | render `a1d0c5d8…` · Seedance ref `105da2e9…` | ✅ approved 2026-05-26 |
-| Black-hoodie "3 Tools" | completed `c1b96c9c…` | ✅ approved 2026-05-26 |
+| Clone | HeyGen ID | Verified | Role |
+|---|---|---|---|
+| **Blue-polo** (canonical look/voice) | `a1d0c5d8d87f4d358769ab216cbe7398` | 16:9 1280×720, audio ✅ | the approved look + voice reference (~8s) |
+| **3 Tools** (black-hoodie) | `1adc7ebdf9b54e0fa3d94b129798a85d` | 16:9 1920×1080, audio ✅ | full-length content clip (~4:52) |
 
-**DO NOT USE** (Brent rejected / wrong lane):
+For new content, Brent renders in one of these **looks** in the GUI; the result is
+checked against this look + 16:9 at GATE A.
+
+**DO NOT USE:**
 - `dc9823ab…` — wrong clone, **rejected by Brent**.
 - `5b175330…` and the portrait digital-twins — legacy new-render lane only.
-- Anything not in the approved list above.
+- **Old-registry IDs `c1b96c9c…` / `105da2e9…` (Seedance) are SUPERSEDED** by the two
+  verified IDs above — the `Brent's Favorite Clones` registry is stale (Buffer-era).
+- Anything not in the two approved IDs above.
 
 ### ⚠️ Stale registry data — DO NOT follow it
 The registry json is from the **Buffer era (2026-05-26)** and is wrong on two points
