@@ -21,11 +21,14 @@ deadline, or "just post it" overrides it.
 
 | Clone | HeyGen ID | Verified | Role |
 |---|---|---|---|
-| **Blue-polo** (canonical look/voice) | `a1d0c5d8d87f4d358769ab216cbe7398` | 16:9 1280×720, audio ✅ | the approved look + voice reference (~8s) |
-| **3 Tools** (black-hoodie) | `1adc7ebdf9b54e0fa3d94b129798a85d` | 16:9 1920×1080, audio ✅ | full-length content clip (~4:52) |
+| **3 Tools** | `1adc7ebdf9b54e0fa3d94b129798a85d` | 16:9 1920×1080, audio ✅ | full content clip (~5 min) |
+| **Blue shirt** | `d5920d626aa042ad85d45f2a9c410ca1` | 16:9 1920×1080, audio ✅ | full content clip (~4 min); HeyGen title "blue shirt appoved clone" |
 
-For new content, Brent renders in one of these **looks** in the GUI; the result is
-checked against this look + 16:9 at GATE A.
+⚠️ **`a1d0c5d8…` is NOT a usable clone** — it's an 8-second render *test*. It was
+wrongly treated as "the blue shirt" 2026-06-22; the real blue shirt is `d5920d62…`.
+
+These are **finished clips, posted AS-IS** (no render — every render is rejected).
+Reusing the same clone repeatedly is fine.
 
 **DO NOT USE:**
 - `dc9823ab…` — wrong clone, **rejected by Brent**.
