@@ -9,8 +9,15 @@ deadline, or "just post it" overrides it.
 
 ## Approved clones — the ONLY looks allowed
 
+> ## 🚫 NEVER GENERATE A CLONE. EVER.
+> The video source is **ALWAYS one of the two finished approved clips below, used
+> AS-IS.** Do NOT render, generate, or create an avatar video — not Avatar III / IV /
+> V, not Video Agent, not photo avatars, not "just a probe." **Every generated render
+> has been rejected as dog shit.** These two clips are the only good clones. Package
+> them; never make a new one.
+
 **Source of truth: the two clones in Brent's HeyGen "Brent clone 2" folder**
-(confirmed by Brent + verified live 2026-06-22). These two IDs only:
+(confirmed by Brent + verified live 2026-06-22). These two finished MP4s ONLY:
 
 | Clone | HeyGen ID | Verified | Role |
 |---|---|---|---|
