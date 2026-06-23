@@ -38,6 +38,23 @@ Proven working example: `~/hyperframes-prototype/caption-demo-16x9/` (built 2026
    descriptor.** (A prominent "39 Years in Network Marketing" lower-third was the
    exact mistake that triggered this rule — name only, always.)
 
+## Quality gate (MANDATORY — it posts under Brent's name)
+
+Two gates around the package, every box mandatory — full checklist in
+**[references/quality-gate.md](references/quality-gate.md)**:
+
+- **GATE A — CLONE-IN** (before packaging): the clip is an **approved look**
+  (blue-polo Avatar IV canonical, or black-hoodie — never a rejected/legacy clone),
+  **16:9 1920×1080**, approved voice, clean render, says the approved script.
+- **GATE B — PUBLISH-OUT** (before staging): captions once · **lower-third name-only**
+  · CTA `stan.store/brentbryson` · thumbnail clean · compliance scrubbed · verified
+  by looking.
+- **The human gate:** staged **PRIVATE-first** → **Brent reviews** → **Brent flips
+  public**. Claude never makes a video public under Brent's name.
+
+⚠️ The approved-clone registry's defaults are **stale** (`9:16` / `portrait` / Buffer) —
+the gate **overrides** them: **16:9 only, Blotato only.**
+
 ## Quick start (the proven path)
 
 ```bash
@@ -58,14 +75,19 @@ generator at `scripts/build_comp16.py` to emit the composition from the transcri
 ## Workflow checklist
 
 - [ ] Auth HeyGen CLI from `kloop.env` (never the stale `BRENT_CREDENTIALS.md` keys)
-- [ ] Pull a clean **16:9** speaking master (ffprobe-confirm 1920×1080 before using)
+- [ ] **GATE A — clone-in:** clip is an APPROVED look (blue-polo Avatar IV / black-hoodie,
+      not a rejected/legacy clone), **16:9 1920×1080** (ffprobe-confirm), approved voice,
+      clean render, says the approved script — see [references/quality-gate.md](references/quality-gate.md)
 - [ ] Cut the segment; `npx hyperframes transcribe` for word timings
 - [ ] Generate composition (`scripts/build_comp16.py`): video + caption rail + name
       lower-third + CTA end card, each on its own track-index
 - [ ] `npx hyperframes lint public` → 0 errors (track-density warning is OK)
 - [ ] Render with `PRODUCER_BROWSER_GPU_MODE=hardware`
 - [ ] **Verify by extracting frames and looking** — never trust the success line
+- [ ] **GATE B — publish-out:** captions once · lower-third name-only · CTA clean ·
+      thumbnail clean · compliance scrubbed — see [references/quality-gate.md](references/quality-gate.md)
 - [ ] Build the review folder + announce copy (see [references/announce-loop.md](references/announce-loop.md))
+- [ ] **Human gate:** stage **PRIVATE-first** → Brent reviews → Brent flips public
 
 ## Where things go
 
