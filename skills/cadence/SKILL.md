@@ -1,221 +1,126 @@
 ---
 name: cadence
 description: >-
-  Weekly-batch content cadence system. Use when Brent says "run the weekly
-  batch", "run cadence", "build this week's posts", "schedule the week", or
-  "do my content for the week". Drafts and schedules a full week of posts at the
-  current ramp volume (1→4/day/channel, auto-advancing by calendar week) across
-  Facebook, Instagram, and X (text+image), plus YouTube as a daily video channel
-  (auto-uploaded PRIVATE-first via scripts/youtube-autoload.sh, for Brent's review), behind a mandatory
-  human approval gate. NEVER posts or schedules without Brent's explicit
-  approval. NEVER repeats an idea already in the usedIdeas ledger.
+  Weekly-batch content cadence system for Facebook, Instagram, and X only.
+  Use when Brent says "run the weekly batch", "run cadence", "build this week's posts",
+  or "schedule the week". Drafts and schedules approved social posts behind a mandatory
+  human approval gate. Never touches YouTube.
 ---
 
-# cadence (Skill 3)
+# Cadence
 
-The weekly-batch orchestration layer. One ~10-minute approval session per week
-covers the full factory run: Sabrina's "Do, Then Share" playbook applied to
-Brent's real receipts, at a volume that ramps automatically, distributed across
-all connected channels via `write-content` (drafting) + Blotato (publishing).
+The weekly orchestration layer for Brent's social-content system.
 
-**Voice and drafting stay in `write-content`. Distribution and scheduling stay
-in `blotato-post`. This skill orchestrates both — it never rewrites copy.**
+## Hard channel boundary
 
----
+This skill supports only:
 
-## What it does
+- Facebook Pages
+- Instagram business or creator accounts
+- X
 
-`cadence` is the durable weekly-batch layer that sits above `write-content` and
-Blotato. Each run first verifies that the prior week's scheduled posts actually
-published (the "Do, Then Share" proof loop) before drafting anything new. Then
-it reads the current ramp volume from `state.json`, selects enough fresh ideas
-(no repeats, no ideas already in `usedIdeas`) to cover the week's total, runs
-each idea through `write-content` for voice-true drafts, generates required
-visuals for Instagram, assembles every post with the correct Blotato fields,
-presents the full batch for a single approval, and — only after explicit
-approval — schedules every post via `POST /posts`, confirms each via
-`GET /schedules`, and updates `state.json`. The ramp and no-repeat ledger
-advance automatically; the only recurring human action is the ~10-minute
-weekly review-and-approve.
+YouTube is out of scope. Do not create, upload, schedule, verify, or manage YouTube content from this repository.
 
----
+## Responsibilities
 
-## Inputs
+1. Verify the prior week's Facebook, Instagram, and X posts.
+2. Compute the current weekly volume from `state.json`.
+3. Re-verify live account IDs.
+4. Pull fresh source material and enforce the no-repeat ledger.
+5. Run `write-content` for voice-true platform drafts.
+6. Build required Instagram visuals and optional Facebook/X visuals.
+7. Assign explicit send times.
+8. Present the complete batch for Brent's approval.
+9. Schedule only after explicit approval.
+10. Confirm every submission through the active publisher and update state.
 
-**Required (computed automatically):**
-- Current week number and per-day-per-channel volume — derived from
-  `state.json.startDate` and today's date per `ramp-and-state.md`. No manual
-  input needed.
+## Publisher adapter
 
-**Optional overrides:**
-- **Target week override** — `week=<N>` forces a specific ramp week (e.g.
-  `week=2` to re-run the Week 2 volume). Use only when correcting a mismatch.
-- **Core URL or file to repurpose** — a YouTube URL, article URL, PDF path, or
-  raw text block to treat as the batch's primary source. Passed to Blotato's
-  repurposing endpoint (`POST /source-resolutions-v3`) and then to
-  `write-content`. Useful when a webinar recording or long-form piece should
-  anchor the week.
-- **`--dry-run`** — runs Steps 1–7 and shows the full batch at the gate but
-  submits nothing (no `POST /posts`, no state update). The approval gate still
-  runs so Brent can review; no `GET /schedules` confirmation appears because
-  nothing is scheduled.
+Blotato is the current provider, but cadence must treat it as a replaceable adapter.
 
-**Defaults:** compute week from `state.json.startDate`; no specific core;
-live scheduling on approval.
+Editorial logic, platform copy, approval rules, idea selection, and state tracking must not depend on Blotato-specific concepts beyond the adapter boundary.
 
----
+Each approved post must be normalized to this provider-neutral contract before submission:
 
-## Process
+```text
+platform: facebook | instagram | x
+accountRef: stable internal account reference
+text: final approved copy
+media: zero or more approved media URLs
+scheduledTime: ISO-8601 UTC
+ideaSlug: no-repeat ledger key
+approvalRecord: explicit Brent approval reference
+```
 
-### Load building blocks first
+The adapter must return:
 
-Before any computation, read all four source files:
+```text
+provider
+providerPostId
+platform
+scheduledTime
+status
+publicUrl (when available)
+errorMessage (when applicable)
+```
 
-1. `skills/cadence/references/ramp-and-state.md` — ramp table, week
-   arithmetic, `state.json` schema, and update rules.
-2. `skills/cadence/references/slots-and-rest.md` — Blotato REST base URL,
-   auth, account/subaccount endpoints, slot management, `POST /posts` field
-   contract, sources/visuals, per-channel required fields, common mistakes.
-3. `skills/cadence/references/weekly-run.md` — the authoritative 8-step
-   weekly procedure.
-4. `skills/cadence/state.json` — live `startDate`, `usedIdeas` ledger, and
-   `scheduled` history.
+## Source priority
 
-Read the Blotato API key from `~/.claude.json` at path
-`.mcpServers.blotato.headers["blotato-api-key"]`. Never echo or print it.
+1. Brent's current work, experiments, and lessons
+2. `vault-personal`, including books, stories, frameworks, and Wispr transcripts
+3. approved long-form source material
+4. the social idea bank
 
-### Execute the 9-step procedure (Step 0 first)
-
-`references/weekly-run.md` is the authoritative procedure. Execute its steps
-in order, beginning with Step 0:
-
-| Step | Name | What happens |
-|---|---|---|
-| 0 | Verify last week published | GET /posts/{id} for past FB/IG/X scheduled entries; report published/failed/pending to Brent before drafting. |
-| 1 | Compute this week's volume | Read `startDate` from `state.json`; apply `week = floor((today - startDate) / 7) + 1`; `perDayPerChannel = min(week, 4)`. If `startDate` is missing, stop and ask Brent. |
-| 2 | Re-verify accounts | `GET /users/me/accounts`; map platform → live `accountId`. Fetch `pageId` from FB subaccounts; mark FB SKIP if no Page found. |
-| 3 | Pull fresh material | Apply "Do, Then Share" source priority; enforce no-repeat guard against `usedIdeas`; if idea bank exhausted stop and ask Brent. |
-| 4 | Draft each post | Run `write-content` skill per idea; accept only drafts that pass all 5 criteria; never mutate copy. |
-| 5 | Build visuals | Generate visuals for every IG post (required); optional for FB/X; skip IG post cleanly if generation fails. |
-| 6 | Assign send times (slots optional) | Compute explicit ISO-8601 UTC `scheduledTime` for each post spread across the week (primary path — slots/`useNextFreeSlot` are plan-gated and currently return Unauthorized on Brent's plan). |
-| 7 | Present batch + approval gate | Show full batch; run rubric criteria 2–5; wait for explicit approval (see Approval gate below). |
-| 8 | Schedule + update state | On approval: `POST /posts`; confirm via `GET /schedules`; append `usedIdeas` + `scheduled` entries to `state.json`. |
-
-See `references/weekly-run.md` for the full per-step detail including
-endpoint contracts, slot arithmetic, visual poll intervals, and state-update
-rules. All step details are authoritative there; do not substitute from memory.
-
----
+Every selected idea receives a unique slug checked against `state.json.usedIdeas`.
 
 ## Approval gate
 
-**Nothing is scheduled (`POST /posts`) without Brent's explicit approval.
-No exceptions. No batch size, time pressure, or "just do it" instruction
-bypasses this gate.**
+Nothing is scheduled or posted without Brent's explicit approval.
 
-Before presenting, run the `blotato-post` safety rubric (criteria 2–5) on
-every post. Criterion 1 (Human-approved) is PENDING until Brent approves:
+Accepted approval must be unambiguous, such as:
 
-```
-[Platform] [AccountId] — Human-approved: PENDING | Account-valid: PASS | Voice/compliance: PASS | Warm-up: PASS | Media-valid: PASS
-```
+- approved
+- yes, schedule these
+- go
 
-Any criterion at FAIL: skip that post with a clear reason. Do not include
-failed posts in the approval prompt.
+Silence, partial review, or "looks good" without clear authorization is not approval.
 
-**Skip rules:**
-- Facebook with no connected Page → skip FB for this run; show the message:
-  "Facebook has no Page connected in Blotato — connect a Page (dashboard:
-  'Facebook pages: Don't see your pages? Help') to enable FB posting."
-- Any platform missing a required field (IG without `mediaUrl`) → skip that
-  post; show a specific message. Do not block the rest of the batch.
+## Platform rules
 
-**Wait for Brent's explicit approval.** "Yes," "approved," "go," or an
-equivalent affirmative. Silence or "looks good" without a clear approval word
-is NOT approval. If Brent requests a change, do not call `POST /posts` — revise
-and re-present.
+### Facebook
 
-**If unsure whether a post is over a line, ask Brent — he decides.**
+- A connected Facebook Page is required.
+- Text-only posts are allowed.
+- Media is optional when it adds value.
 
-All scheduling defaults to `scheduledTime` (ISO-8601 UTC) set at root level —
-never nested inside `post`. Never schedule immediately unless Brent explicitly
-says "post now."
+### Instagram
 
----
+- At least one approved media asset is required.
+- Skip the individual post cleanly if media generation fails.
 
-## Output
+### X
 
-After all `POST /posts` calls succeed and `GET /schedules` confirms each post,
-present a summary table populated from live `GET /schedules` values — not
-inferred from `POST /posts` responses alone:
+- Text, media posts, and approved threads are allowed.
+- Respect current platform limits and adapter validation.
 
-| Platform | Account ID | Scheduled time (UTC) | Post ID | Idea slug | Status |
-|---|---|---|---|---|---|
-| Facebook | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
-| Instagram | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
-| X | {live accountId} | {ISO-8601 UTC from GET /schedules} | {UUID from POST /posts, confirmed via GET /schedules} | {slug} | Scheduled |
-| YouTube | {live accountId} | {publish/schedule time} | {UUID} | {slug} | PRIVATE — staged for review (or Scheduled) |
+## Verification
 
-Follow with a SKIPPED section listing every post that was not scheduled, the
-platform, and the specific reason (no Page, missing required field, media
-failure, rubric FAIL).
+Never claim a post is scheduled or published based only on a submission response.
 
-**Never claim a post is scheduled or live without confirmation from
-`GET /schedules`.**
+Confirm each post through the provider's status endpoint and record:
 
----
+- scheduled
+- published
+- failed
+- pending
 
-## Durability
-
-The only recurring human action is the ~10-minute weekly approval. Everything
-else is automatic:
-
-- **Ramp advances automatically** — `week` is computed fresh each run from
-  `state.json.startDate`; no manual volume input needed.
-- **No-repeat guard is automatic** — every idea slug is checked against
-  `usedIdeas` before drafting; the ledger is append-only and persists across
-  sessions.
-- **Send times computed explicitly** — Step 6 assigns explicit ISO-8601 UTC `scheduledTime` values spread across the week's days per channel (primary path). Slot self-provisioning is optional — currently plan-gated (`POST /schedule/slots` returns Unauthorized on Brent's plan).
-- **State persists** — `state.json` is updated immediately after every approved
-  batch; the next run picks up exactly where this one left off.
-- **Weekly trigger** — run `/cadence` at the start of each content week to keep
-  the factory running; optionally set a `/schedule` reminder to trigger it
-  automatically.
-
----
-
-## YouTube — video channel (Brent supplies the clip)
-
-YouTube is a video channel (`@BrentBrysonaios`, Blotato account `27755`).
-
-🚫 **DO NOT auto-generate clones.** Settled 2026-06-19 after a full day of
-failed attempts: every API/Video-Agent render (incl. HeyGen's own flagship) was
-rejected. **Claude does NOT make the video.** Brent makes his clone himself in
-the HeyGen GUI (Avatar IV / Seedance — the only quality he accepts); the good
-clips live in his Projects **"Brent Clone"** folder. Claude's job is **downstream
-only**.
-
-**The working handoff:**
-1. Brent points to a finished clip (a HeyGen video ID, or says which one).
-2. Fetch its `video_url` (`heygen video get <id>` → `.data.video_url`).
-3. Post it **AS-IS, full-width 16:9** (his preferred direction — NEVER crop to
-   vertical 9:16; he rejects narrow-tall. 9:16 only if the piece is explicitly a
-   Short) via `scripts/youtube-autoload.sh --video <url> --title "…" --desc-file <path>`
-   (defaults PRIVATE; `--schedule <ISO-UTC>` to stage). Add title + the
-   `stan.store/brentbryson` free-guide link in the description.
-4. Brent reviews Private, flips Public when happy (or it auto-publishes if scheduled).
-
-One canonical clone going forward: his **blue-polo Avatar IV** look. See
-[[project-blotato-social-posting]] for the full settled model.
-
----
+Surface errors without automatically retrying unless Brent has approved a retry policy.
 
 ## Out of scope
 
-- **No hands-off / auto-post mode** — Option B (fully autonomous scheduling
-  without a weekly approval) is not built yet. The gate is mandatory.
-- **No voice authorship** — `cadence` does not draft copy or select cadences.
-  That is `write-content`'s domain. `cadence` passes ideas to `write-content`
-  and accepts its output character-for-character.
-- **No analytics optimization** — post-performance data does not feed back into
-  scheduling or idea selection in this version.
+- YouTube
+- autonomous posting without approval
+- changing approved copy inside cadence
+- generating presenter video
+- video-studio workflows
+- redefining Brent's voice
