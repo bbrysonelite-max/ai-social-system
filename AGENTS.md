@@ -16,9 +16,11 @@ YouTube and long-form video production belong exclusively in the separate `youtu
 
 ## Publisher rule
 
-Blotato is the current publisher adapter, not the architecture.
+**Blotato is the approved production publisher for Facebook, Instagram, and X.**
 
-Keep all editorial logic, voice rules, approval gates, cadence, and state tracking provider-neutral so the publisher can be replaced later.
+Do not reopen publisher selection, propose a migration, add Buffer/Postiz/PolyPost/other publisher integrations, or start a comparison project unless Brent explicitly asks to reconsider this decision.
+
+Keep the post contract clear and maintainable, but Blotato is the operating choice.
 
 ## Approval rule
 
@@ -29,4 +31,4 @@ Never post or schedule without Brent's explicit approval.
 - `vault-personal`: source material and voice
 - `tigerclaw-primitives`: Tiger Claw visual and motion primitives
 - `youtube-video-studio`: YouTube and video production
-- `ai-social-system`: Facebook, Instagram, and X only
+- `ai-social-system`: Facebook, Instagram, and X through Blotato only
