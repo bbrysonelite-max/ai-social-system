@@ -15,7 +15,7 @@ idea or source material
   → voice-true drafts
   → platform-specific visuals
   → Brent approval
-  → publisher adapter
+  → Blotato
   → Facebook / Instagram / X
   → verification and performance feedback
 ```
@@ -33,23 +33,16 @@ No YouTube account may be configured in this repository.
 | Order | Skill | Responsibility |
 |---|---|---|
 | 1 | `skills/write-content` | Draft platform-specific posts in Brent's voice. Never publishes. |
-| 2 | `skills/blotato-post` | Current publishing adapter for Facebook, Instagram, and X. |
+| 2 | `skills/blotato-post` | Approved production publisher for Facebook, Instagram, and X. |
 | 3 | `skills/cadence` | Weekly orchestration, no-repeat ledger, approval gate, scheduling, and verification. |
 
-## Publisher policy
+## Publisher decision
 
-Blotato remains the current production publisher, but it is an adapter—not part of the editorial core.
+**Blotato is the approved production publisher for Facebook, Instagram, and X.**
 
-The system must keep a provider-neutral post contract so Blotato can later be replaced by Buffer, Postiz, Mixpost, or another approved publisher without rewriting voice, research, cadence, or approval logic.
+This decision is settled by Brent. Agents must not reopen publisher selection, propose migrations, or add competing publisher integrations unless Brent explicitly asks to reconsider it.
 
-No provider migration occurs until a shadow test proves all three active channels can:
-
-1. authenticate reliably
-2. accept text and required media
-3. schedule at an exact time
-4. return a durable post identifier
-5. expose success or failure status
-6. operate without touching YouTube
+The internal post contract should remain clean and well-defined so the system is maintainable, but no active migration or shadow-provider project is authorized.
 
 ## Approval law
 
@@ -57,7 +50,7 @@ Nothing is posted or scheduled without Brent's explicit approval.
 
 ## Repository boundaries
 
-- `ai-social-system`: Facebook, Instagram, and X content and distribution
+- `ai-social-system`: Facebook, Instagram, and X content and distribution through Blotato
 - `youtube-video-studio`: Two Brents YouTube and video production
 - `tigerclaw-primitives`: Tiger Claw visual and motion primitives
 - `vault-personal`: source material, stories, voice, books, and Wispr transcripts
