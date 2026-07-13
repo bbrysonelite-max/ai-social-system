@@ -1,60 +1,63 @@
-# ai-social-system
+# AI Social System
 
-The parent project for Brent Bryson's autonomous content factory — high-volume,
-high-integrity social content in his own voice, batched once a week and distributed
-across every connected channel.
+Brent Bryson's social-content factory for **Facebook, Instagram, and X only**.
 
-> **Status: LIVE.** All three skills built, merged, and posting to production —
-> FB, IG, X daily since 2026-06-17; **YouTube live since 2026-06-19** (daily video
-> channel, auto-uploaded private-first for review).
+> **Hard boundary:** This repository never creates, schedules, uploads, publishes, or manages YouTube videos. YouTube and long-form video production belong exclusively in the separate `youtube-video-studio` repository.
 
-## The model
+## Mission
 
-Adopted from Sabrina Ramonov's (founder of Blotato) "content factory" process:
-~250 pieces/week, batched in ~1 hour, every piece reviewed for brand voice before
-it goes live. Human stays in the loop on creative direction; AI handles volume.
+Turn Brent's real work, ideas, stories, and lessons into voice-true social posts, then distribute approved posts reliably across Facebook, Instagram, and X.
 
-Pipeline: **idea → voice-true drafts → visuals + scheduling → weekly feedback loop.**
+## Pipeline
 
-## The three skills
-
-| Order | Skill | Job | Depends on |
-|---|---|---|---|
-| 1 | `skills/write-content` | Turn one idea into platform-specific posts **in Brent's voice**. Drafting only — no posting. | Voice sources (local) |
-| 2 | `skills/blotato-post` | Generate visuals + schedule/post drafts across connected channels via Blotato. | Blotato (REST; MCP loads on fresh session) |
-| 3 | `skills/cadence` | Weekly-batch orchestration: ramp volume, no-repeat ledger, approve-first gate, schedule the week across all channels. | Skills 1 + 2 |
-
-The split is deliberate: Skill 1 has no external dependency and is built/tested first;
-Skill 2 talks to Blotato; Skill 3 orchestrates both into the durable weekly run.
-
-### Channels
-
-- **Facebook, Instagram, X** — text+image, ramp **1→4 posts/day/channel** over 4 weeks.
-- **YouTube** — **daily video channel** (channel `@BrentBrysonaios`, Blotato acct `27755`).
-  Each post needs a video; uploads are **automatic and PRIVATE-first** via
-  `skills/cadence/scripts/youtube-autoload.sh` (Blotato has no raw local-file upload,
-  so the video must be at a public URL — daily HeyGen renders already are). Brent
-  reviews the private video in the morning queue, then flips it Public (or it
-  auto-publishes if scheduled). **He never uploads manually.**
-
-## Positioning
-
-The earned-authority voice on **why AI + person-to-person distribution matters for
-direct sales, affiliate marketing, and network marketing.** The differentiator is
-proof, not hype — three generational windows, Blue Diamond, 39 years in distribution.
-(See `docs/DESIGN.md`.)
-
-## Layout
-
+```text
+idea or source material
+  → voice-true drafts
+  → platform-specific visuals
+  → Brent approval
+  → publisher adapter
+  → Facebook / Instagram / X
+  → verification and performance feedback
 ```
-ai-social-system/
-├── docs/DESIGN.md              # full design / spec
-├── skills/
-│   ├── write-content/          # Skill 1 (voice)
-│   ├── blotato-post/           # Skill 2 (distribution)
-│   └── cadence/                # Skill 3 (weekly orchestration)
-│       ├── references/         # ramp, REST contract, weekly procedure
-│       ├── scripts/            # youtube-autoload.sh (hands-free YouTube upload)
-│       └── state.json          # startDate, usedIdeas ledger, scheduled history
-└── content-db/                 # weekly content-idea database
-```
+
+## Active channels
+
+- Facebook Pages
+- Instagram business or creator accounts
+- X
+
+No YouTube account may be configured in this repository.
+
+## Core skills
+
+| Order | Skill | Responsibility |
+|---|---|---|
+| 1 | `skills/write-content` | Draft platform-specific posts in Brent's voice. Never publishes. |
+| 2 | `skills/blotato-post` | Current publishing adapter for Facebook, Instagram, and X. |
+| 3 | `skills/cadence` | Weekly orchestration, no-repeat ledger, approval gate, scheduling, and verification. |
+
+## Publisher policy
+
+Blotato remains the current production publisher, but it is an adapter—not part of the editorial core.
+
+The system must keep a provider-neutral post contract so Blotato can later be replaced by Buffer, Postiz, Mixpost, or another approved publisher without rewriting voice, research, cadence, or approval logic.
+
+No provider migration occurs until a shadow test proves all three active channels can:
+
+1. authenticate reliably
+2. accept text and required media
+3. schedule at an exact time
+4. return a durable post identifier
+5. expose success or failure status
+6. operate without touching YouTube
+
+## Approval law
+
+Nothing is posted or scheduled without Brent's explicit approval.
+
+## Repository boundaries
+
+- `ai-social-system`: Facebook, Instagram, and X content and distribution
+- `youtube-video-studio`: Two Brents YouTube and video production
+- `tigerclaw-primitives`: Tiger Claw visual and motion primitives
+- `vault-personal`: source material, stories, voice, books, and Wispr transcripts
