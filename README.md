@@ -1,3 +1,14 @@
+# ⚠️ RETIRED (2026-07-23)
+
+This system was consolidated into two living systems:
+
+- **SOCIAL system** → private repo `brag-machine` (voice engine, cadence engine, warm-up, funnel, and Blotato REST knowledge absorbed there under `voice/`, `cadence/`, `docs/`)
+- **YOUTUBE system** → Two Brents (~/Desktop/YOUTUBE; youtube-autoload.sh + HeyGen handoff moved there)
+
+Nothing runs from this repo anymore. Kept for history.
+
+---
+
 # ai-social-system
 
 The parent project for Brent Bryson's autonomous content factory — high-volume,
