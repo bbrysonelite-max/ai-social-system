@@ -55,6 +55,60 @@ Step 0 does **not** block drafting. If failures are found, surface them clearly 
 
 If `state.json.scheduled` is empty or has no past entries, note "No prior scheduled posts to verify" and proceed.
 
+### Auto-offer to heal failures (non-blocking)
+
+For any post classified **failed** in this step, offer — in the verification summary — to re-draft it into THIS week's batch (it flows through the normal gate like any other post, so nothing reposts without approval). Do not silently retry, and do not auto-`POST`. The point is that failures heal into the next batch instead of vanishing. A failed idea's slug stays in `usedIdeas`; re-drafting it is the one sanctioned recycle (note it explicitly to Brent).
+
+---
+
+## Step 0.5 — Learn from last week (engagement feedback loop)
+
+Before choosing this week's ideas and times, read how last week actually performed and let the data shape Steps 3 and 6. Without this, every week is as blind as Week 1. **This step is read-only, best-effort, and non-blocking** — if analytics are unavailable it degrades to "no signal yet" and the batch proceeds on defaults.
+
+### Pull engagement for last week's published posts
+
+For each `state.json.scheduled` entry that Step 0 classified **published** (has a `publicUrl`), call:
+
+```
+GET /posts/{postSubmissionId}/analytics
+```
+
+(See `slots-and-rest.md` → Analytics.) Join each result back to its `ideaRef` (idea slug) and its `scheduledTime` hour + `platform`.
+
+**If analytics endpoints 401/404 on Brent's plan** (likely — not yet live-verified): say so plainly, skip to "Apply the signal" with whatever is already in `state.json.performance` (possibly empty), and optionally ask Brent if he wants to hand-enter a few standout/dud posts. Never fabricate numbers; a missing readback is `unknown`, not `0`.
+
+### Rank what worked
+
+From whatever engagement data is available, compute two lightweight rankings:
+
+1. **By theme/pillar** — group by `ideaRef` family (and, where known, the pillar from `write-content`); rank by an engagement proxy (e.g. `likes + 2×comments + shares + clicks`). Identify the top ~3 and bottom ~3.
+2. **By send window** — group published posts by `(platform, hour-of-day UTC)`; rank by the same proxy. Identify the best 1–2 windows per platform.
+
+Keep it simple and explainable — this is a nudge, not an optimizer. With fewer than ~5 published posts, note "insufficient signal" and treat rankings as provisional.
+
+### Persist the signal
+
+Write the rankings to `state.json.performance` (schema in `ramp-and-state.md`). This is a rolling, overwrite-latest field (NOT an append-only ledger) — it always reflects the most recent read.
+
+### Apply the signal (downstream)
+
+- **Step 3 (idea selection):** bias toward themes/pillars in the top ranking; deprioritize (don't ban) the bottom ones. Brent's editorial judgment at the gate still wins.
+- **Step 6 (send times):** prefer the best-performing windows per platform instead of the static defaults.
+
+### Present a one-line signal summary
+
+Before Step 1, show Brent:
+
+```
+── Last-week signal ────────────────────────────────────
+Top themes:   <slug-family> (<proxy>), …   |  insufficient signal if <5 posts
+Best windows: FB 16:00Z · IG 22:00Z · X 15:00Z
+Analytics:    live  (or: unavailable — using prior/no signal)
+────────────────────────────────────────────────────────
+```
+
+If there is no signal at all (first run, or analytics unavailable and `performance` empty), print "No engagement signal yet — proceeding on defaults" and continue.
+
 ---
 
 ## Step 1 — Compute this week's volume
@@ -106,6 +160,8 @@ See `slots-and-rest.md` (Auth + Accounts section) for the full endpoint contract
 
 Pick enough ideas to cover the week's full volume (Step 1 total), applying the **no-repeat guard**: before selecting any idea, confirm its slug is **not** already in `state.json.usedIdeas`. Skip any idea whose slug appears there.
 
+**Bias by last week's signal (Step 0.5).** If `state.json.performance` has rankings, weight selection toward the top themes/pillars and lean away from the bottom ones. This is a nudge, not a filter — never repeat a used slug to chase a winning theme; instead pick a *fresh* idea in that theme's family. Brent's judgment at the gate overrides any ranking.
+
 ### Do, Then Share — content strategy
 
 This is Sabrina Ramonov's "Do, Then Share" playbook applied to Brent's business. Prioritize real, earned material before reaching for the idea bank.
@@ -138,7 +194,16 @@ This is Sabrina Ramonov's "Do, Then Share" playbook applied to Brent's business.
 - "Repurpose one win 20 ways" — a single result or story can cover an entire week across platforms if atomized correctly.
 - Vary angles per platform: a stat becomes an IG visual, an insight becomes an X thread, a story becomes a Facebook post.
 
-**No-repeat guard:** For every candidate idea or story, generate or confirm a slug (a short identifier, e.g. `"webinar-launch-june-17"` or `"tiger-rebuild-week-3"`). Skip any slug already present in `state.json.usedIdeas`. If the idea bank is exhausted (all slugs appear in `usedIdeas`), stop and report this to Brent before continuing — ask which ideas may be recycled.
+**No-repeat guard (exact + near-duplicate):** For every candidate idea or story, generate or confirm a slug (a short identifier, e.g. `"webinar-launch-june-17"` or `"tiger-rebuild-week-3"`). Reject a candidate if EITHER:
+- its slug exactly matches an entry in `state.json.usedIdeas`, OR
+- it is a **near-duplicate** of a used idea — same core claim/angle under a different slug (e.g. `clone-the-leader-x` vs `clone-your-leader`). Exact-slug matching alone is not enough; compare the *meaning*, not just the string. When two candidates are near-duplicates of each other within the same batch, keep one.
+
+**Auto-replenish before stopping (do NOT dead-end on the Desktop bank).** The Desktop bank (`~/Desktop/Social Media Posts: Ideas/`, ~76 ideas) is *fill only* and will exhaust quickly at Week-3/4 volume. When it runs low or dry, pull fresh material automatically — in this order — before ever asking Brent for permission to recycle:
+
+1. **Brent's real receipts this week** (source priority 1 above) — always first.
+2. **The personal vault** (`~/Desktop/vault-personal/`) — the effectively-unlimited reservoir: the 3 books (`02_The_Library/Book_1..3`) and ~354 notes / 1000+ ideas across `01_Active_Projects`, `02_The_Library`, `03_The_Stream`, `04_The_Synthesizer`. Pull fresh angles here via `create_source` / direct read, slug each, and run them through the same no-repeat guard. **Prefer vault angles in last week's top-performing themes** (Step 0.5). This is the replenishment path — the bank exhausting is normal, not a stopping condition.
+
+**Only stop and ask Brent** if (a) real receipts, the Desktop bank, AND the vault are all exhausted of non-duplicate ideas for the week's volume — which should be rare given the vault's size — or (b) a Step-0 *failed* post needs its used slug recycled (the one sanctioned recycle; flag it explicitly).
 
 Collect the selected ideas with their slugs before proceeding to Step 4.
 
@@ -189,7 +254,9 @@ For each channel and each day, assign a send time by staggering posts at sensibl
 - Post 1: 14:00 UTC (morning in US-friendly zones)
 - Post 2: 20:00 UTC (early evening)
 
-Adjust hours per channel character (e.g. FB/IG slightly earlier, X can go later). Spread posts for the same idea across different days — do not cluster all posts on day 1.
+**Prefer the best-performing windows from Step 0.5** (`state.json.performance.bestWindows`, per platform) over these static defaults whenever signal exists. The defaults above are the fallback for platforms/hours with no signal yet.
+
+Adjust hours per channel character (e.g. FB/IG slightly earlier, X can go later). Spread posts for the same idea across different days — do not cluster all posts on day 1. **Enforce the stagger here:** two posts on the same platform on the same day must be ≥30 minutes apart (the safety rubric checks this at the gate — satisfy it now, don't leave it to fail later).
 
 Assign one explicit `scheduledTime` (ISO-8601 UTC) to each post. These values are used directly in the Step 8 `POST /posts` calls at root level.
 
@@ -209,25 +276,38 @@ Record the intended scheduled time for each post — this is needed for the appr
 
 ## Step 7 — Present batch + approval gate
 
-Present the **full batch** before calling `POST /posts` for any post. Nothing is scheduled without Brent's explicit approval.
+Nothing is scheduled without Brent's explicit approval. **But do not dump 84 raw drafts on him** — at Week-3/4 volume a flat "read everything" list is a fiction nobody reads carefully, and the gate becomes a rubber stamp. Present **tiered (approve-by-exception)** so the human attention lands where it matters.
 
-### Presentation format
+### Tiered presentation (approve-by-exception)
 
-For each post, show:
+Split the batch into two tiers:
 
-- **Platform** and live `accountId`
-- **Exact post text** (character-for-character from `write-content`)
-- **Visual URL or preview** (if applicable)
-- **Scheduled time** (ISO-8601 UTC)
-- **Idea slug** (for traceability)
+**Tier 1 — REVIEW IN FULL (show every field).** A post goes here if ANY of:
+- it touches a compliance-sensitive line (income/earnings/health/company-endorsement adjacency — anything `write-content`'s `never-say.md` flags as borderline),
+- it introduces a **new or untested theme/angle** (not in last week's `performance` top set, or a brand-new claim),
+- it carries an unusual CTA or links somewhere other than the standard lead magnet / `stan.store/brentbryson`,
+- its rubric scored anything other than a clean PASS on criteria 2–5,
+- it's a YouTube video (always full-review — it's Brent's face).
 
-Follow the `blotato-post` safety rubric — run criteria 2–5 now; criterion 1 (Human-approved) is PENDING until Brent approves:
+For each Tier-1 post show the full detail: **platform + live `accountId`, exact text (character-for-character), visual URL/preview, scheduled time (ISO-8601 UTC), idea slug.**
+
+**Tier 2 — APPROVE-BY-EXCEPTION (collapsed table).** Everything else — routine, on-pattern, clean-rubric posts in proven themes. Show one scannable row per post:
+
+| # | Platform | Time (UTC) | Idea slug | First ~12 words of text | Visual |
+|---|---|---|---|---|---|
+| 1 | Facebook | 2026-06-24T16:00Z | followup-fortune | "The fortune isn't in the sale. It's in the follow…" | ✅ img |
+
+Tell Brent explicitly: **"Tier 1 needs your eyes. Tier 2 is routine — say 'expand 7' to see any row in full, or approve them as a block."** Any Tier-2 row is expandable to full detail on request.
+
+### Rubric (applies to BOTH tiers)
+
+Run the `blotato-post` safety rubric — criteria 2–5 now; criterion 1 (Human-approved) is PENDING until Brent approves. Print one rubric line per **Tier-1** post (full), and a single **batch rubric summary** for Tier 2 (e.g. "Tier 2: 38 posts, all Account-valid ✅ / Voice ✅ / Warm-up ✅ / Media-valid ✅"):
 
 ```
 [Platform] [AccountId] — Human-approved: PENDING | Account-valid: PASS | Voice/compliance: PASS | Warm-up: PASS | Media-valid: PASS
 ```
 
-Any criterion at FAIL: skip that post with a clear reason. Do not include it in the approval prompt.
+Any criterion at FAIL: the post drops to a FAIL list (skipped), never into Tier 2's clean block. A FAIL is never hidden by collapsing.
 
 ### Skip handling
 

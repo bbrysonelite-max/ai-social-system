@@ -172,6 +172,37 @@ PATCH /schedules/{id}           // update (reschedule) a post
 
 ---
 
+## Analytics (engagement readback)
+
+> **NOT YET LIVE-VERIFIED on Brent's plan.** These endpoints are the documented Blotato analytics surface; treat them like slots — **attempt them, and degrade gracefully if they 401/404.** Verify live before trusting numbers. If they are unavailable, the feedback loop (Step 0.5) falls back to manual entry (see `ramp-and-state.md` → `performance` ledger). Never invent engagement numbers — a missing readback is reported as `unknown`, not zero.
+
+Per-post engagement:
+
+```
+GET /posts/{postSubmissionId}/analytics
+```
+
+Expected (shape varies by platform): `{ "views": N, "likes": N, "comments": N, "shares": N, "reach": N, "clicks": N }`. Some platforms return a subset; absent fields are `unknown`, not `0`.
+
+Account-level rollup:
+
+```
+GET /analytics
+GET /analytics?platform=instagram
+```
+
+**Follower counts are NOT reliably exposed via Blotato** — for IG especially, read those from the platform app, not here. The feedback loop uses per-post engagement (likes/comments/reach/clicks), not follower deltas.
+
+### How the loop consumes this
+
+Step 0.5 reads analytics for the prior week's **published** posts (those with a `publicUrl` from Step 0), joins each back to its `state.json.scheduled` entry via `postSubmissionId` → `ideaRef`, and derives:
+- **Top pillars / angles** — which `ideaRef` themes earned the most engagement.
+- **Top send windows** — which `scheduledTime` hours (per platform) outperformed.
+
+These rankings are written to `state.json.performance` and feed Step 3 (idea selection) and Step 6 (send times). See `ramp-and-state.md`.
+
+---
+
 ## Sources & visuals
 
 ### Repurpose a source
